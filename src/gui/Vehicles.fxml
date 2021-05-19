@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.VehicleController">
+    <children>
+        <Pane prefHeight="506.0" prefWidth="162.0" style="-fx-background-color: #373F51;">
+            <children>
+                <Button layoutY="111.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="162.0" style="-fx-background-color: #58A4B0;" text="Système véhicules">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font></Button>
+                <Button layoutY="167.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="162.0" style="-fx-background-color: #58A4B0;" text="Système smartphones">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font></Button>
+                <Text fill="WHITE" layoutX="38.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Menu">
+                    <font>
+                        <Font name="System Bold" size="32.0" />
+                    </font>
+                </Text>
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>
