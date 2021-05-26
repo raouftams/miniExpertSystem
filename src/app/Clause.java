@@ -21,28 +21,42 @@ public class Clause {
     void addRuleRef(Rule ref) { ruleRefs.addElement(ref); }
 
     Boolean check() {
-        if (consequent) return null ;
+        if (consequent) return truth = null ;
         if (lhs.value == null) return truth = null ;  // can't check if variable value is undefined
+        if(checkInt(rhs)){
 
-        switch(cond.index) {
-            case 1: truth = lhs.value.equals(rhs);
-                //        RuleBase.appendText("\nTesting Clause " + lhs.name + " = " + rhs + " " + truth);
-                break ;
-            case 2: truth = lhs.value.compareTo(rhs) > 0;
-                //        RuleBase.appendText("\nTesting Clause " + lhs.name + " > " + rhs + " " + truth);
-                break ;
-            case 3: truth = lhs.value.compareTo(rhs) < 0;
-                //        RuleBase.appendText("\nTesting Clause " + lhs.name + " < " + rhs + " " + truth);
-                break ;
-            case 4: truth = lhs.value.compareTo(rhs) != 0;
-                //        RuleBase.appendText("\nTesting Clause " + lhs.name + " != " + rhs + " " + truth);
-                break ;
+            switch(cond.index) {
+                case 1:
+                    truth = (Integer.parseInt(lhs.value)==Integer.parseInt(rhs));
+
+                    //        RuleBase.appendText("\nTesting Clause " + lhs.name + " = " + rhs + " " + truth);
+                    break ;
+                case 2:
+                    truth = (Integer.parseInt(lhs.value)>(Integer.parseInt(rhs)));
+                    //        RuleBase.appendText("\nTesting Clause " + lhs.name + " > " + rhs + " " + truth);
+                    break ;
+                case 3: truth = (Integer.parseInt(lhs.value)<(Integer.parseInt(rhs)));
+                    //        RuleBase.appendText("\nTesting Clause " + lhs.name + " < " + rhs + " " + truth);
+                    break ;
+                case 4: truth = (Integer.parseInt(lhs.value)!=(Integer.parseInt(rhs)));
+                    //        RuleBase.appendText("\nTesting Clause " + lhs.name + " != " + rhs + " " + truth);
+                    break ;
+            }
+
         }
-
         return truth ;
     }
 
     void isConsequent() { consequent = Boolean.TRUE; }
+    public Boolean checkInt(String s){
+        try {
+            Integer.parseInt(s);
+            return true;
+
+        }catch (Exception e){
+            return  false;
+        }
+    }
 
     Rule getRule() {
         if (consequent) return (Rule)ruleRefs.firstElement() ;

@@ -34,7 +34,7 @@ public abstract class Variable {
     }
 
     // return a string containing all labels
-    String getLabels() {
+    public String getLabels() {
         String labelList = new String();
         Enumeration enum87 = labels.elements() ;
         while(enum87.hasMoreElements()) {

@@ -1,26 +1,146 @@
 package app;
 
 import java.awt.*;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Stack;
-import java.util.Vector;
+import java.util.*;
 
 public class RuleBase {
     String name ;
-    Hashtable variableList ;    // all variables in the rulebase
+
+
+
+    Hashtable<String, RuleVariable> variableList = new Hashtable<String, RuleVariable>();    // all variables in the rulebase
     Clause clauseVarList[];
-    Vector ruleList ;           // list of all rules
+
+
+
+    Vector<Rule> ruleList = new Vector<Rule>() ;           // list of all rules
     Vector conclusionVarList ;  // queue of variables
     Rule rulePtr ;              // working pointer to current rule
     Clause clausePtr ;          // working pointer to current clause
     Stack goalClauseStack;      // for goals (cons clauses) and subgoals
 
-    static TextArea textArea1 ;
+    static TextArea textArea1 = new TextArea() ;
 
     public void setDisplay(TextArea txtArea) { textArea1 = txtArea; }
 
-    RuleBase(String Name) { name = Name; }
+    public RuleBase(String Name) { name = Name;
+        //Define variables
+        RuleVariable brand = new RuleVariable("Brand");
+        brand.setLabels("apple google samsung xiaomi asus");
+        this.variableList.put((String) brand.name, brand);
+
+        RuleVariable os = new RuleVariable("OS");
+        os.setLabels("android ios");
+        this.variableList.put(os.name, os);
+
+        RuleVariable ui = new RuleVariable("UI");
+        ui.setLabels("none miui oneui ");
+        this.variableList.put(ui.name, ui);
+
+        RuleVariable securityLevel = new RuleVariable("Security level");
+        securityLevel.setLabels("high medium");
+        this.variableList.put(securityLevel.name, securityLevel);
+
+        RuleVariable phoneRange = new RuleVariable("Phone range");
+        phoneRange.setLabels("flagship midrange budget");
+        this.variableList.put(phoneRange.name, phoneRange);
+
+        RuleVariable utility = new RuleVariable("Utility");
+        utility.setLabels("business communication gaming");
+        this.variableList.put(utility.name, utility);
+
+        RuleVariable userBudget = new RuleVariable("User budget");
+        userBudget.setLabels("200 300 400 500 600 700 800 900 1000 1100 1200");
+        this.variableList.put(userBudget.name, userBudget);
+
+        Condition cEquals = new Condition("=") ;
+        Condition cNotEquals = new Condition("!=") ;
+        Condition cLessThan = new Condition("<") ;
+        Condition cMoreThan = new Condition(">") ;
+        Condition cLessThanOrEquals = new Condition("<=");
+        Condition cMoreThanOrEquals = new Condition(">=");
+
+        /*
+        todo: pull the rules using their names
+
+         */
+        //Define rules
+        Rule flagshipRange = new Rule(this, "check flagship",
+                new Clause(userBudget, cMoreThanOrEquals, "700"),
+                new Clause(phoneRange, cEquals, "flagship")
+        );
+
+        Rule midRange = new Rule(this, "check midrange",
+                new Clause(userBudget, cLessThan, "700"),
+                new Clause(userBudget, cMoreThanOrEquals, "300"),
+                new Clause(phoneRange, cEquals, "midrange")
+        );
+
+        Rule budgetRange = new Rule(this, "check budget",
+                new Clause(userBudget, cLessThan, "300"),
+                new Clause(phoneRange, cEquals, "budget")
+        );
+
+        Rule highSecurity = new Rule(this, "high security",
+                new Clause(securityLevel, cEquals, "high"),
+                new Clause(os, cEquals, "ios")
+        );
+
+        Rule midSecurity = new Rule(this, "medium security",
+                new Clause(securityLevel, cEquals, "medium"),
+                new Clause(os, cEquals, "android")
+        );
+
+        Rule businessUtility = new Rule(this, "business utility",
+                new Clause(utility, cEquals, "business"),
+                new Clause(securityLevel, cEquals, "high")
+        );
+
+        Rule gamingUtility = new Rule(this, "gaming utility",
+                new Clause(utility, cEquals, "gaming"),
+                new Clause(securityLevel, cEquals, "medium")
+        );
+
+        Rule communicationUtility = new Rule(this, "communication utility",
+                new Clause(utility, cEquals, "communication"),
+                new Clause(securityLevel, cEquals, "medium")
+        );
+
+        Rule appleUi = new Rule(this, "apple os",
+                new Clause(os, cEquals, "ios"),
+                new Clause(brand, cEquals, "apple")
+        );
+
+        Rule googleUi = new Rule(this, "google os",
+                new Clause(os, cEquals, "android"),
+                new Clause(ui, cEquals, "none"),
+                new Clause(brand, cEquals, "google")
+        );
+
+        Rule samsungUi = new Rule(this, "samsung ui",
+                new Clause(os, cEquals, "android"),
+                new Clause(ui, cEquals, "oneui"),
+                new Clause(brand, cEquals, "samsung")
+        );
+
+        Rule xiaomiUi = new Rule(this, "xiaomi ui",
+                new Clause(os, cEquals, "android"),
+                new Clause(ui, cEquals, "miui"),
+                new Clause(brand, cEquals, "xiaomi")
+        );
+
+        Rule gamingPhone = new Rule(this, "gaming phone",
+                new Clause(os, cEquals, "android"),
+                new Clause(utility, cEquals, "gaming"),
+                new Clause(brand, cEquals, "asus")
+        );
+    }
+    public Vector<Rule> getRuleList() {
+        return ruleList;
+    }
+    public Hashtable getVariableList() {
+        return variableList;
+    }
 
     public static void appendText(String text) { textArea1.appendText(text); }
 

@@ -228,7 +228,7 @@ public class Rule {
 
     // used by forward chaining only !
     Boolean check() {  // if antecedent is true and rule has not fired
-        RuleBase.appendText("\nTesting rule " + name ) ;
+
         for (int i=0 ; i < antecedents.length ; i++ ) {
             if (antecedents[i].truth == null) return null ;
             if (antecedents[i].truth) {
@@ -246,7 +246,7 @@ public class Rule {
     //  it is references, and then all rules which contain
     //  those clauses
     void fire() {
-        RuleBase.appendText("\nFiring rule " + name ) ;
+
         truth = new Boolean(true) ;
         fired = true ;
         // set the variable value and update clauses
@@ -259,7 +259,7 @@ public class Rule {
     // by recursively trying to prove its antecedent clauses are true
     // if any are false, the rule is false
     Boolean backChain() {
-        RuleBase.appendText("\nEvaluating rule " + name) ;
+
         for (int i=0 ; i < antecedents.length ; i++) { // test each clause
             if (antecedents[i].truth == null) rb.backwardChain(antecedents[i].lhs.name);
             if (antecedents[i].truth == null) { // we couldn't prove true or false

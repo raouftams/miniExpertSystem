@@ -16,7 +16,7 @@ public class RuleVariable extends Variable{
     // prompt a user to provide a value for a variable during inferencing
     String askUser() {
         String answer = RuleApplet.waitForAnswer(promptText, getLabels()) ; // show dialog
-        RuleBase.appendText("\n  !!! Looking for " + name + ". User entered: " + answer) ;
+
         setValue(answer) ; // need to set value from textField here
         return value ;
     }

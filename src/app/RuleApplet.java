@@ -27,17 +27,7 @@ public class RuleApplet extends Applet {
 
     }
 
-    // user selected a variable
-    void choice2_Clicked(Event event) {
-        String varName = choice2.getSelectedItem() ;
-        choice3.removeAll() ;
 
-        RuleVariable rvar = (RuleVariable)currentRuleBase.variableList.get(varName);
-        Enumeration labels = rvar.labels.elements();
-        while (labels.hasMoreElements()) {
-            choice3.addItem(((String)labels.nextElement())) ;
-        }
-    }
 
 
 
@@ -199,7 +189,7 @@ public class RuleApplet extends Applet {
         choice1_Clicked() ; // fill variable list
     }
 
-    private void initSmartphoneRuleBase(RuleBase rb) {
+    public void initSmartphoneRuleBase(RuleBase rb) {
         rb.goalClauseStack = new Stack();
         rb.variableList = new Hashtable();
         rb.ruleList = new Vector() ;
@@ -329,10 +319,6 @@ public class RuleApplet extends Applet {
         }
         if (event.target == choice1 && event.id == Event.ACTION_EVENT) {
             choice1_Clicked();
-            return true;
-        }
-        if (event.target == choice2 && event.id == Event.ACTION_EVENT) {
-            choice2_Clicked(event);
             return true;
         }
         if (event.target == choice3 && event.id == Event.ACTION_EVENT) {

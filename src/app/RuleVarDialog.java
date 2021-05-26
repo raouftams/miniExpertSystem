@@ -81,3 +81,4 @@ public class RuleVarDialog extends Dialog {
     String answer = new String("") ;
 }
 
+// todo: a enlever
