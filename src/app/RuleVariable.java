@@ -10,15 +10,12 @@ public class RuleVariable extends Variable{
         clauseRefs = new Vector();
     }
 
-    void setValue(String val) { value = val; updateClauses(); }
+    public void setValue(String val) { value = val; updateClauses(); }
 
 
     // prompt a user to provide a value for a variable during inferencing
     String askUser() {
-        String answer = RuleApplet.waitForAnswer(promptText, getLabels()) ; // show dialog
-
-        setValue(answer) ; // need to set value from textField here
-        return value ;
+        return "";
     }
 
     Vector clauseRefs ;   // clauses which refer to this var

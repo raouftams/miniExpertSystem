@@ -1,4 +1,4 @@
-package app;
+/*package app;
 import java.awt.*;
 import java.applet.*;
 import java.util.* ;
@@ -806,3 +806,4 @@ public class RuleApplet extends Applet {
     }
 
 }
+*/

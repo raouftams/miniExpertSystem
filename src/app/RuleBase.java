@@ -2,6 +2,7 @@ package app;
 
 import java.awt.*;
 import java.util.*;
+import javafx.scene.control.TextArea;
 
 public class RuleBase {
     String name ;
@@ -10,8 +11,6 @@ public class RuleBase {
 
     Hashtable<String, RuleVariable> variableList = new Hashtable<String, RuleVariable>();    // all variables in the rulebase
     Clause clauseVarList[];
-
-
 
     Vector<Rule> ruleList = new Vector<Rule>() ;           // list of all rules
     Vector conclusionVarList ;  // queue of variables
@@ -37,11 +36,11 @@ public class RuleBase {
         ui.setLabels("none miui oneui ");
         this.variableList.put(ui.name, ui);
 
-        RuleVariable securityLevel = new RuleVariable("Security level");
+        RuleVariable securityLevel = new RuleVariable("SecurityLevel");
         securityLevel.setLabels("high medium");
         this.variableList.put(securityLevel.name, securityLevel);
 
-        RuleVariable phoneRange = new RuleVariable("Phone range");
+        RuleVariable phoneRange = new RuleVariable("PhoneRange");
         phoneRange.setLabels("flagship midrange budget");
         this.variableList.put(phoneRange.name, phoneRange);
 
@@ -49,7 +48,7 @@ public class RuleBase {
         utility.setLabels("business communication gaming");
         this.variableList.put(utility.name, utility);
 
-        RuleVariable userBudget = new RuleVariable("User budget");
+        RuleVariable userBudget = new RuleVariable("UserBudget");
         userBudget.setLabels("200 300 400 500 600 700 800 900 1000 1100 1200");
         this.variableList.put(userBudget.name, userBudget);
 
@@ -145,12 +144,14 @@ public class RuleBase {
     public static void appendText(String text) { textArea1.appendText(text); }
 
     // for trace purposes - display all variables and their value
-    public void displayVariables(TextArea textArea) {
+    public ArrayList displayVariables() {
+        ArrayList<String> text = new ArrayList<>();
         Enumeration enum87 = variableList.elements() ;
         while(enum87.hasMoreElements()) {
             RuleVariable temp = (RuleVariable)enum87.nextElement() ;
-            textArea.appendText("\n" + temp.name + " value = " + temp.value) ;
+            text.add("\n" + temp.name + " value = " + temp.value);
         }
+        return text;
     }
 
     // for trace purposes - display all rules in text format
@@ -159,18 +160,19 @@ public class RuleBase {
         Enumeration enum87 = ruleList.elements() ;
         while(enum87.hasMoreElements()) {
             Rule temp = (Rule)enum87.nextElement() ;
-            temp.display(textArea) ;
         }
     }
 
     // for trace purposes - display all rules in the conflict set
-    public void displayConflictSet(Vector ruleSet) {
-        textArea1.appendText("\n" + " -- Rules in conflict set:\n");
+    public ArrayList<String> displayConflictSet(Vector ruleSet) {
+        ArrayList<String> text = new ArrayList<>();
+        text.add("\n" + " -- Rules in conflict set:\n");
         Enumeration enum87 = ruleSet.elements() ;
         while(enum87.hasMoreElements()) {
             Rule temp = (Rule)enum87.nextElement() ;
-            textArea1.appendText(temp.name + "(" + temp.numAntecedents()+ "), " ) ;
+            text.add(temp.name + "(" + temp.numAntecedents()+ "), " );
         }
+        return text;
     }
 
 
@@ -268,7 +270,7 @@ public class RuleBase {
     }
 
     public void forwardChain() {
-        Vector conflictRuleSet = new Vector() ;
+        Vector conflictRuleSet;
 
         // first test all rules, based on initial data
         conflictRuleSet = match(true); // see which rules can fire

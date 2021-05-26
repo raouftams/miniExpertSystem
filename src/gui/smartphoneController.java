@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -26,15 +27,17 @@ public class smartphoneController implements Initializable {
     private RuleBase rb = new RuleBase("Smartphones");
     @FXML
     private ChoiceBox<String> Brand, Utility, Secu, OS, UI, Range, Budget = new ChoiceBox<String>();
+    @FXML
+    private TextArea displayArea, conflictSetArea = new TextArea();
 
     //variables
     String[] brands = ((RuleVariable)rb.getVariableList().get("Brand")).getLabels().split("[ ]+");
     String[] util = ((RuleVariable)rb.getVariableList().get("Utility")).getLabels().split("[ ]+");
     String[] os = ((RuleVariable)rb.getVariableList().get("OS")).getLabels().split("[ ]+");
     String[] ui = ((RuleVariable)rb.getVariableList().get("UI")).getLabels().split("[ ]+");
-    String[] sec = ((RuleVariable)rb.getVariableList().get("Security level")).getLabels().split("[ ]+");
-    String[] range = ((RuleVariable)rb.getVariableList().get("Phone range")).getLabels().split("[ ]+");
-    String[] budget = ((RuleVariable)rb.getVariableList().get("User budget")).getLabels().split("[ ]+");
+    String[] sec = ((RuleVariable)rb.getVariableList().get("SecurityLevel")).getLabels().split("[ ]+");
+    String[] range = ((RuleVariable)rb.getVariableList().get("PhoneRange")).getLabels().split("[ ]+");
+    String[] budget = ((RuleVariable)rb.getVariableList().get("UserBudget")).getLabels().split("[ ]+");
 
 
     public void switchToVehicles(ActionEvent event) throws IOException {
@@ -65,83 +68,79 @@ public class smartphoneController implements Initializable {
     Secu.getItems().addAll(sec);
     Budget.getItems().addAll(budget);
 
+    this.displayArea.setEditable(false);
+    this.conflictSetArea.setEditable(false);
+
     Budget.setOnAction(this::setrange);
-    Secu.setOnAction(this::setos2);
-    OS.setOnAction(this::setBrandAsus);
-    Utility.setOnAction(this::setBrandAsus);
-    OS.setOnAction(this::setBrand);
+    Secu.setOnAction(this::setSecurity);
+    Utility.setOnAction(this::setUtility);
+    OS.setOnAction(this::setOS);
     UI.setOnAction(this::setbrandui);
-    Utility.setOnAction(this::hadiwkhlas);
+    Range.setOnAction(this::setRange);
+    Brand.setOnAction(this::setBrand);
 
 
 
     }
 
     public void setrange(ActionEvent event){
-        int budget = Integer.parseInt(Budget.getValue());
-        if(budget >= 700){
-            Range.setValue("flagship");
-        }
-        if(budget < 300){
-            Range.setValue("budget");
-        }
-        if(budget<700 && budget >= 300){
-            Range.setValue("midrange");
-        }
+        String budget = Budget.getValue();
+        RuleVariable rvar = (RuleVariable)this.rb.getVariableList().get("UserBudget");
+        rvar.setValue(budget);
+
     }
-    public void setos2(ActionEvent event){
-        if(Secu.getValue().equals("medium")){
-            OS.setValue("android");
-        }
-        if(Secu.getValue().equals("high")){
-            OS.setValue("ios");
-        }
-    }
-    public void setBrand(ActionEvent event){
+
+    public void setOS(ActionEvent event){
         String os = OS.getValue();
-        String ui = UI.getValue();
-        if (os.equals("ios")){
-            Brand.setValue("apple");
-            UI.setValue("none");
-        }
+        RuleVariable rvar = (RuleVariable)this.rb.getVariableList().get("OS");
+        rvar.setValue(os);
     }
     public void setbrandui(ActionEvent event){
         String ui = UI.getValue();
-        if (ui.equals("none") && !(OS.getValue()==null) &&!OS.getValue().equals("ios")){
-            Brand.setValue("google");
-            OS.setValue("android");
-        }
-        if (ui.equals("miui")){
-            Brand.setValue("xiaomi");
-            OS.setValue("android");
-        }
-        if(ui.equals("oneui")){
-            Brand.setValue("samsung");
-            OS.setValue("android");
-        }
+        RuleVariable rvar = (RuleVariable)this.rb.getVariableList().get("UI");
+        rvar.setValue(ui);
     }
-    public void setBrandAsus(ActionEvent event){
-        if( OS.getValue()!=null && OS.getValue().equals("android")){
-            if(Utility.getValue()!=null && Utility.getValue().equals("gaming")){
-                Brand.setValue("asus");
-            }
-        }
+    public void setUtility(ActionEvent event){
+        String utility = this.Utility.getValue();
+        RuleVariable rvar = (RuleVariable)this.rb.getVariableList().get("Utility");
+        rvar.setValue(utility);
     }
-    public void hadiwkhlas(ActionEvent event){
-        if(Utility.getValue().equals("gaming")){
-            Secu.setValue("medium");
-        }
-        if (Utility.getValue().equals("communication")){
-            Secu.setValue("medium");
-        }
-        if(Utility.getValue().equals("business")){
-            Secu.setValue("high");
-        }
+
+    public void setSecurity(ActionEvent event){
+        String secuLevel = this.Secu.getValue();
+        RuleVariable rvar = (RuleVariable)this.rb.getVariableList().get("SecurityLevel");
+        rvar.setValue(secuLevel);
     }
+
+    public void setBrand(ActionEvent event){
+        String brand = this.Brand.getValue();
+        RuleVariable rvar = (RuleVariable)this.rb.getVariableList().get("Brand");
+        rvar.setValue(brand);
+    }
+
+    public void setRange(ActionEvent event){
+        String range = this.Range.getValue();
+        RuleVariable rvar = (RuleVariable)this.rb.getVariableList().get("PhoneRange");
+        rvar.setValue(range);
+    }
+
 
     //action this.ruleBase.forwardchaine();
     public void luncher(){
         this.rb.forwardChain();
+        ArrayList<String> text = this.rb.displayVariables();
+        for (String s : text) {
+            this.displayArea.appendText(s);
+            System.out.println(s);
+        }
+        this.displayArea.appendText("\n");
+
+        text = this.rb.displayConflictSet(this.rb.getRuleList());
+        for (String s : text) {
+            this.conflictSetArea.appendText(s);
+            System.out.println(s);
+        }
+        this.conflictSetArea.appendText("\n");
     }
 }
 
