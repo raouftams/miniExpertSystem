@@ -170,7 +170,7 @@ public class RuleBase {
         Enumeration enum87 = ruleSet.elements() ;
         while(enum87.hasMoreElements()) {
             Rule temp = (Rule)enum87.nextElement() ;
-            text.add(temp.name + "(" + temp.numAntecedents()+ "), " );
+            text.add(temp.toText());
         }
         return text;
     }
@@ -178,13 +178,14 @@ public class RuleBase {
 
     // reset the rule base for another round of inferencing
     // by setting all variable values to null
-    public void reset() {
-        textArea1.appendText("\n --- Setting all " + name + " variables to null");
+    public String reset() {
+        String text = "\n --- Setting all " + name + " variables to null";
         Enumeration enum87 = variableList.elements() ;
         while(enum87.hasMoreElements()) {
             RuleVariable temp = (RuleVariable)enum87.nextElement() ;
             temp.setValue(null) ;
         }
+        return text;
     }
 
     // for all consequent clauses which refer to this goalVar

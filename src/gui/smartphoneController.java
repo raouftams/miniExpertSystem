@@ -131,16 +131,23 @@ public class smartphoneController implements Initializable {
         ArrayList<String> text = this.rb.displayVariables();
         for (String s : text) {
             this.displayArea.appendText(s);
-            System.out.println(s);
         }
         this.displayArea.appendText("\n");
 
         text = this.rb.displayConflictSet(this.rb.getRuleList());
         for (String s : text) {
-            this.conflictSetArea.appendText(s);
-            System.out.println(s);
+            this.conflictSetArea.appendText(s + "\n");
         }
         this.conflictSetArea.appendText("\n");
+    }
+
+    public void resetVariables(ActionEvent event){
+        displayArea.appendText(this.rb.reset());
+        ArrayList<String> text = this.rb.displayVariables();
+        for (String s : text) {
+            this.displayArea.appendText(s);
+        }
+        this.displayArea.appendText("\n");
     }
 }
 

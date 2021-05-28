@@ -46,10 +46,11 @@
       <Label fx:id="mylabel22" layoutX="476.0" layoutY="45.0" prefHeight="25.0" prefWidth="63.0" text="OS;" />
       <Label fx:id="mylabel23" layoutX="476.0" layoutY="94.0" prefHeight="25.0" prefWidth="63.0" text="Range:" />
       <Label fx:id="mylabel24" layoutX="476.0" layoutY="142.0" prefHeight="25.0" prefWidth="63.0" text="UI:" />
-      <Button fx:id="Luncher" layoutX="610.0" layoutY="194.0" mnemonicParsing="false" onAction="#luncher" prefHeight="25.0" prefWidth="118.0" text="Foward Chain" />
-      <TextArea fx:id="displayArea" layoutX="189.0" layoutY="261.0" prefHeight="200.0" prefWidth="198.0" />
-      <Text layoutX="189.0" layoutY="258.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rules :" wrappingWidth="198.0" />
+      <Button fx:id="Luncher" layoutX="594.0" layoutY="182.0" mnemonicParsing="false" onAction="#luncher" prefHeight="25.0" prefWidth="150.0" text="Foward Chain" />
+      <TextArea fx:id="displayArea" layoutX="178.0" layoutY="261.0" prefHeight="200.0" prefWidth="247.0" />
+      <Text layoutX="178.0" layoutY="258.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rules :" wrappingWidth="198.0" />
       <Text layoutX="436.0" layoutY="258.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Conflict set:" wrappingWidth="80.150390625" />
       <TextArea fx:id="conflictSetArea" layoutX="436.0" layoutY="261.0" prefHeight="200.0" prefWidth="313.0" />
+      <Button fx:id="resetButton" layoutX="595.0" layoutY="219.0" mnemonicParsing="false" onAction="#resetVariables" prefHeight="25.0" prefWidth="150.0" text="Reset" />
    </children>
 </AnchorPane>

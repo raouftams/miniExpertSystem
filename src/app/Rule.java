@@ -292,18 +292,20 @@ public class Rule {
                 consequent.rhs + "\n") ;
     }
 
-    void toText(){
-        System.out.print(name + ": IF ");
+    public String toText(){
+        String text = name + ": IF ";
         for(int i=0 ; i < antecedents.length ; i++) {
             Clause nextClause = antecedents[i] ;
-            System.out.print(nextClause.lhs.name +
-                    nextClause.cond.asString() +
-                    nextClause.rhs + " ") ;
-            if ((i+1) < antecedents.length) System.out.print("\n     AND ") ;
+            text += nextClause.lhs.name
+                    + nextClause.cond.asString() +
+                    nextClause.rhs + " " ;
+            if ((i+1) < antecedents.length) text += "\n     AND ";
         }
-        System.out.print("\n     THEN ") ;
-        System.out.println(consequent.lhs.name +
+        text += "\n     THEN ";
+        text += consequent.lhs.name +
                 consequent.cond.asString() +
-                consequent.rhs + "\n") ;
+                consequent.rhs + "\n";
+
+        return text;
     }
 }
