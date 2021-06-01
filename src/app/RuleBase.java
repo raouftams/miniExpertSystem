@@ -201,6 +201,7 @@ public class RuleBase {
         while(enum87.hasMoreElements()) {
             RuleVariable temp = (RuleVariable)enum87.nextElement() ;
             temp.setValue(null) ;
+
         }
         return ("\n --- Setting all " + name + " variables to null");
     }

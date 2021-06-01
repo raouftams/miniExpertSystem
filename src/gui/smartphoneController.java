@@ -150,6 +150,16 @@ public class smartphoneController implements Initializable {
             this.displayArea.appendText(s);
         }
         this.displayArea.appendText("\n");
+        this.rb = new RuleBase("Smartphones");
+
+
+        Brand.setValue(null);
+        Utility.setValue(null);
+        OS.setValue(null);
+        UI.setValue(null);
+        Range.setValue(null);
+        Secu.setValue(null);
+        Budget.setValue(null);
     }
 }
 
