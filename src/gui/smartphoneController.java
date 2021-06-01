@@ -127,18 +127,20 @@ public class smartphoneController implements Initializable {
 
     //action this.ruleBase.forwardchaine();
     public void luncher(){
-        this.rb.forwardChain();
+        this.rb.forwardChain(this.conflictSetArea);
         ArrayList<String> text = this.rb.displayVariables();
         for (String s : text) {
             this.displayArea.appendText(s);
         }
         this.displayArea.appendText("\n");
 
-        text = this.rb.displayConflictSet(this.rb.getRuleList());
-        for (String s : text) {
+        //text = this.rb.displayConflictSet(this.rb.getRuleList());
+        /*for (String s : text) {
             this.conflictSetArea.appendText(s + "\n");
         }
         this.conflictSetArea.appendText("\n");
+
+         */
     }
 
     public void resetVariables(ActionEvent event){

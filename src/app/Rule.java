@@ -1,6 +1,5 @@
 package app;
 
-import java.awt.*;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -226,28 +225,35 @@ public class Rule {
         }
     }
 
+
     // used by forward chaining only !
     Boolean check() {  // if antecedent is true and rule has not fired
-
+        /*
+            check if all the antecedents are correct so we can say that the
+            rule is true!!!
+         */
+        //RuleBase.appendText("\nTesting rule " + name ) ;
         for (int i=0 ; i < antecedents.length ; i++ ) {
             if (antecedents[i].truth == null) return null ;
-            if (antecedents[i].truth) {
+            if (antecedents[i].truth == true) {
                 continue ;
             } else {
-                return truth = Boolean.FALSE; //don't fire this rule
+                return truth = false ; //don't fire this rule
             }
         } // endfor
-        return truth = Boolean.TRUE;  // could fire this rule
+        return truth = true ;  // could fire this rule
     }
+
 
     // used by forward chaining only !
     // fire this rule -- perform the consequent clause
     // if a variable is changes, update all clauses where
     //  it is references, and then all rules which contain
     //  those clauses
-    void fire() {
 
-        truth = new Boolean(true) ;
+    void fire() {
+        RuleBase.appendText("\nFiring rule " + name ) ;
+        truth = true ;
         fired = true ;
         // set the variable value and update clauses
         consequent.lhs.setValue(consequent.rhs) ;
@@ -258,54 +264,44 @@ public class Rule {
     // determine is a rule is true or false
     // by recursively trying to prove its antecedent clauses are true
     // if any are false, the rule is false
-    Boolean backChain() {
 
+    Boolean backChain()
+    {
+        /*
+        Will not be used in our project normalement
+         */
+
+        System.out.println("\nEvaluating rule " + name);
         for (int i=0 ; i < antecedents.length ; i++) { // test each clause
             if (antecedents[i].truth == null) rb.backwardChain(antecedents[i].lhs.name);
             if (antecedents[i].truth == null) { // we couldn't prove true or false
-                antecedents[i].lhs.askUser() ; // so ask user for help
                 truth = antecedents[i].check() ; // redundant?
             } // endif
-            if (antecedents[i].truth) {
+            if (antecedents[i].truth.booleanValue() == true) {
                 continue ;    // test the next antecedent (if any)
             } else {
-                return truth = Boolean.FALSE; // exit, if any are false
+                return truth = false ; // exit, if any are false
             }
         } // endfor
-        return truth = Boolean.TRUE; // all antecedents are true
+        return truth = true ; // all antecedents are true
     }
 
     // display the rule in text format
     @SuppressWarnings("deprecation")
-    void display(TextArea textArea) {
-        textArea.appendText(name +": IF ") ;
+    void display() {
+        System.out.println(name +": IF ");
         for(int i=0 ; i < antecedents.length ; i++) {
             Clause nextClause = antecedents[i] ;
-            textArea.appendText(nextClause.lhs.name +
+
+            System.out.println(nextClause.lhs.name +
                     nextClause.cond.asString() +
                     nextClause.rhs + " ") ;
-            if ((i+1) < antecedents.length) textArea.appendText("\n     AND ") ;
+            //TODO: find out why this part is never executed.
+            if ((i+1) < antecedents.length) System.out.println(" AND ") ;
         }
-        textArea.appendText("\n     THEN ") ;
-        textArea.appendText(consequent.lhs.name +
+        System.out.println("\n     THEN ") ;
+        System.out.println(consequent.lhs.name +
                 consequent.cond.asString() +
                 consequent.rhs + "\n") ;
-    }
-
-    public String toText(){
-        String text = name + ": IF ";
-        for(int i=0 ; i < antecedents.length ; i++) {
-            Clause nextClause = antecedents[i] ;
-            text += nextClause.lhs.name
-                    + nextClause.cond.asString() +
-                    nextClause.rhs + " " ;
-            if ((i+1) < antecedents.length) text += "\n     AND ";
-        }
-        text += "\n     THEN ";
-        text += consequent.lhs.name +
-                consequent.cond.asString() +
-                consequent.rhs + "\n";
-
-        return text;
     }
 }

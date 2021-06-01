@@ -1,6 +1,6 @@
 package app;
 
-import java.util.Vector;
+import java.util.*;
 
 public class Clause {
     Vector ruleRefs ;
@@ -9,57 +9,47 @@ public class Clause {
     Condition  cond ;
     Boolean consequent ;  // true or false
     Boolean truth ;   // states = null(unknown), true or false
-
-    Clause(RuleVariable Lhs, Condition Cond, String Rhs) {
-        lhs = Lhs; cond = Cond; rhs = Rhs;
-        lhs.addClauseRef(this);
-        ruleRefs = new Vector();
-        truth = null;
-        consequent = Boolean.FALSE;
+    Clause(RuleVariable Lhs, Condition Cond, String Rhs)
+    {
+        lhs = Lhs ; cond = Cond ; rhs = Rhs ;
+        lhs.addClauseRef(this) ;
+        ruleRefs = new Vector() ;
+        truth = null ;
+        consequent = new Boolean(false) ;
     }
 
-    void addRuleRef(Rule ref) { ruleRefs.addElement(ref); }
+    void addRuleRef(Rule ref) { ruleRefs.addElement(ref) ; }
 
     Boolean check() {
-        if (consequent) return truth = null ;
-        if (lhs.value == null) return truth = null ;  // can't check if variable value is undefined
-        if(checkInt(rhs)){
+        if (consequent.booleanValue() == true) return null ;
+        if (lhs.value == null) {
+            return truth = null ;  // can't check if variable value is undefined
+        } else {
 
             switch(cond.index) {
-                case 1:
-                    truth = (Integer.parseInt(lhs.value)==Integer.parseInt(rhs));
-
-                    //        RuleBase.appendText("\nTesting Clause " + lhs.name + " = " + rhs + " " + truth);
+                case 1: truth = new Boolean(lhs.value.equals(rhs)) ;
+//        RuleBase.appendText("\nTesting Clause " + lhs.name + " = " + rhs + " " + truth);
                     break ;
-                case 2:
-                    truth = (Integer.parseInt(lhs.value)>(Integer.parseInt(rhs)));
-                    //        RuleBase.appendText("\nTesting Clause " + lhs.name + " > " + rhs + " " + truth);
+                case 2: truth = new Boolean(lhs.value.compareTo(rhs) > 0) ;
+//        RuleBase.appendText("\nTesting Clause " + lhs.name + " > " + rhs + " " + truth);
                     break ;
-                case 3: truth = (Integer.parseInt(lhs.value)<(Integer.parseInt(rhs)));
-                    //        RuleBase.appendText("\nTesting Clause " + lhs.name + " < " + rhs + " " + truth);
+                case 3: truth = new Boolean(lhs.value.compareTo(rhs) < 0) ;
+//        RuleBase.appendText("\nTesting Clause " + lhs.name + " < " + rhs + " " + truth);
                     break ;
-                case 4: truth = (Integer.parseInt(lhs.value)!=(Integer.parseInt(rhs)));
-                    //        RuleBase.appendText("\nTesting Clause " + lhs.name + " != " + rhs + " " + truth);
+                case 4: truth = new Boolean(lhs.value.compareTo(rhs) != 0) ;
+//        RuleBase.appendText("\nTesting Clause " + lhs.name + " != " + rhs + " " + truth);
                     break ;
+                case 5: truth = new Boolean(lhs.value.compareTo(rhs) <= 0);
+                    break;
+                case 6: truth = new Boolean(lhs.value.compareTo(rhs) >= 0);
+                    break;
             }
 
-        }
-        return truth ;
-    }
-
-    void isConsequent() { consequent = Boolean.TRUE; }
-    public Boolean checkInt(String s){
-        try {
-            Integer.parseInt(s);
-            return true;
-
-        }catch (Exception e){
-            return  false;
+            return truth ;
         }
     }
-
-    Rule getRule() {
-        if (consequent) return (Rule)ruleRefs.firstElement() ;
-        return null ;
-    }
+    void isConsequent() { consequent = new Boolean(true); }
+    Rule getRule() { if (consequent.booleanValue() == true)
+        return (Rule)ruleRefs.firstElement() ;
+    else return null ;}
 }
