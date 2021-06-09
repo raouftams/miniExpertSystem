@@ -9,22 +9,34 @@
    <children>
       <Pane prefHeight="506.0" prefWidth="162.0" style="-fx-background-color: #373F51;">
          <children>
-            <Button layoutY="111.0" mnemonicParsing="false" onAction="#SwitchtoHome" prefHeight="51.0" prefWidth="162.0" style="-fx-background-color: #58A4B0;" text="Home">
+            <Button layoutY="111.0" mnemonicParsing="false" onAction="#switchToHome" prefHeight="51.0" prefWidth="162.0" style="-fx-background-color: #58A4B0;" text="Home">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
                <font>
                   <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
-            <Button layoutY="167.0" mnemonicParsing="false" onAction="#switchToVehicles" prefHeight="51.0" prefWidth="162.0" style="-fx-background-color: #58A4B0;" text="Système Vehicules">
+               </font></Button>
+            <Button layoutY="167.0" mnemonicParsing="false" onAction="#switchToVehicles" prefHeight="51.0" prefWidth="162.0" style="-fx-background-color: #58A4B0;" text="Système véhicules">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
                <font>
                   <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
+               </font></Button>
+            <Button disable="true" layoutY="223.0" mnemonicParsing="false" onAction="#switchToSmartphones" prefHeight="51.0" prefWidth="162.0" style="-fx-background-color: #58A4B0;" text="Système smartphones">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
+            <Button layoutY="279.0" mnemonicParsing="false" onAction="#switchToFlights" prefHeight="51.0" prefWidth="162.0" style="-fx-background-color: #58A4B0;" text="Vente billets">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
             <Text fill="WHITE" layoutX="38.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Menu">
                <font>
                   <Font name="System Bold" size="32.0" />

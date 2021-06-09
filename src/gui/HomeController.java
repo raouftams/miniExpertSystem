@@ -14,7 +14,14 @@ public class HomeController {
     private Scene scene;
     private Parent root;
 
-
+    public void switchToHome(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Home.fxml")));
+        stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setTitle("Home");
+        stage.setScene(scene);
+        stage.show();
+    }
 
     public void switchToVehicles(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Vehicle.fxml")));
@@ -33,4 +40,15 @@ public class HomeController {
         stage.setScene(scene);
         stage.show();
     }
+
+    public void switchToFlights(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Flights.fxml")));
+        stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setTitle("Flights");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
 }

@@ -2,9 +2,8 @@ package gui;
 
 
 
-import app.Rule;
-import app.RuleBase;
-import app.RuleVariable;
+import app.rule.RuleBase;
+import app.rule.RuleVariable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-public class smartphoneController implements Initializable {
+public class smartphoneController extends HomeController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -38,24 +37,6 @@ public class smartphoneController implements Initializable {
     String[] sec = ((RuleVariable)rb.getVariableList().get("SecurityLevel")).getLabels().split("[ ]+");
     String[] range = ((RuleVariable)rb.getVariableList().get("PhoneRange")).getLabels().split("[ ]+");
     String[] budget = ((RuleVariable)rb.getVariableList().get("UserBudget")).getLabels().split("[ ]+");
-
-
-    public void switchToVehicles(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Vehicle.fxml")));
-        stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setTitle("Vehicles");
-        stage.setScene(scene);
-        stage.show();
-    }
-    public void SwitchtoHome(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Home.fxml")));
-        stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setTitle("Home");
-        stage.setScene(scene);
-        stage.show();
-    }
 
 
     @Override
