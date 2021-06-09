@@ -60,12 +60,20 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></DatePicker>
-      <Spinner editable="true" layoutX="250.0" layoutY="233.0" prefHeight="25.0" prefWidth="150.0" style="-fx-background-color: #fff; -fx-border-color: #58A4B0; -fx-border-radius: 5px;">
+      <Spinner editable="true" layoutX="250.0" layoutY="269.0" prefHeight="25.0" prefWidth="150.0" style="-fx-background-color: #fff; -fx-border-color: #58A4B0; -fx-border-radius: 5px;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Spinner>
-      <Text layoutX="178.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Départ:" />
-      <Text layoutX="178.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Destination" />
-      <Text layoutX="178.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Airport" />
+      <Text layoutX="178.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="De:" />
+      <Text layoutX="178.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A:" />
+      <Text layoutX="178.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aéroport:" />
+      <Text layoutX="178.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Départ:" />
+      <DatePicker layoutX="250.0" layoutY="232.0" prefHeight="27.0" prefWidth="150.0" style="-fx-background-color: #fff; -fx-border-color: #58A4B0; -fx-border-radius: 5px;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </DatePicker>
+      <Text layoutX="178.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Retour:" />
+      <Text layoutX="178.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre:" />
     </children>
 </AnchorPane>
