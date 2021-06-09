@@ -44,5 +44,28 @@
                 </Text>
             </children>
         </Pane>
+      <ChoiceBox layoutX="250.0" layoutY="83.0" prefWidth="150.0" style="-fx-background-color: #fff; -fx-border-color: #58A4B0; -fx-border-radius: 5px;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></ChoiceBox>
+      <ChoiceBox layoutX="250.0" layoutY="121.0" prefWidth="150.0" style="-fx-background-color: #fff; -fx-border-color: #58A4B0; -fx-border-radius: 5px;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></ChoiceBox>
+      <ChoiceBox layoutX="250.0" layoutY="158.0" prefWidth="150.0" style="-fx-background-color: #fff; -fx-border-color: #58A4B0; -fx-border-radius: 5px;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></ChoiceBox>
+      <DatePicker layoutX="250.0" layoutY="194.0" prefHeight="27.0" prefWidth="150.0" style="-fx-background-color: #fff; -fx-border-color: #58A4B0; -fx-border-radius: 5px;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></DatePicker>
+      <Spinner editable="true" layoutX="250.0" layoutY="233.0" prefHeight="25.0" prefWidth="150.0" style="-fx-background-color: #fff; -fx-border-color: #58A4B0; -fx-border-radius: 5px;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Spinner>
+      <Text layoutX="178.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Départ:" />
+      <Text layoutX="178.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Destination" />
+      <Text layoutX="178.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Airport" />
     </children>
 </AnchorPane>
