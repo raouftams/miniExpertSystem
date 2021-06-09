@@ -1,4 +1,4 @@
-package app;
+package app.rule;
 
 public class Condition {
     int index ;

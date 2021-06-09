@@ -1,4 +1,4 @@
-package app;
+package app.rule;
 
 import javafx.scene.control.TextArea;
 
