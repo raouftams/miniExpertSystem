@@ -57,6 +57,122 @@ public class RuleBase {
         Condition cMoreThanOrEquals = new Condition(">=");
 
 
+
+        //Part 2
+
+        //Define variables
+
+
+        RuleVariable destination = new RuleVariable("Destination");
+        destination.setLabels("France Canada Royaume-Uni Chine Algerie");
+        this.variableList.put((String) destination.name, destination);
+
+        RuleVariable depart = new RuleVariable("Depart");
+        depart.setLabels("France Canada Royaume-Uni Chine Algerie");
+        this.variableList.put((String) depart.name, depart);
+
+        RuleVariable age = new RuleVariable("Age");
+        age.setLabels("2 4 6 8 10 12 14 16 20 25 30 55 70 76 80");
+        this.variableList.put((String) age.name, age);
+
+        RuleVariable compagnie = new RuleVariable("Compagnie");
+        compagnie.setLabels("Air_France Qatar_Airways Emirates_Airline Air_Algerie");
+        this.variableList.put((String) compagnie.name, compagnie);
+
+        RuleVariable aeroport = new RuleVariable("Aeroports");
+        aeroport.setLabels("Charles_De_Gaulle(FRA) Lyon_Saint_Exupéry(FRA) " +
+                "Montréal_Mirabel(CAN) Muskoka(CAN) " +
+                "Oran-Es_Senia(DZA) Houari_Boumédiène(DZA) " +
+                "Heathrow(GBA) Birmingham(GBA) " +
+                "Shanghai-Pudong(CHN) Canton-Baiyun(CHN)");
+        this.variableList.put((String) aeroport.name, aeroport);
+
+        RuleVariable saison = new RuleVariable("Saison");
+        saison.setLabels("Saison_Estivale Hors_Saison_Estivale");
+        this.variableList.put((String) saison.name, saison);
+
+        RuleVariable agereduction = new RuleVariable("AgeReduction");
+        agereduction.setLabels("10% 15% 20%");
+        this.variableList.put((String) agereduction.name, agereduction);
+
+        RuleVariable date = new RuleVariable("Date");
+        agereduction.setLabels("22/09/2021 07/08/2021 11/06/2021 24/10/2021 21/11/2021 26/11/2021");
+        this.variableList.put((String) agereduction.name, agereduction);
+
+
+        RuleVariable voyage = new RuleVariable("Voyage");
+        voyage.setLabels("Escale Direct");
+        this.variableList.put((String) voyage.name, voyage);
+
+        //Define rules pt2
+
+        Rule AgeePriceReduction = new Rule(this, "reduction for elders",
+                new Clause(age, cMoreThanOrEquals, "Agee"),
+                new Clause(agereduction, cEquals, "10%")
+        );
+
+        Rule EnfPriceReduction = new Rule(this, "reduction for children",
+                new Clause(age, cLessThan, "7"),
+                new Clause(agereduction, cEquals, "20%")
+        );
+
+        Rule AdoPriceReduction = new Rule(this, "reduction for adolescents",
+                new Clause(userBudget, cLessThanOrEquals, "11"),
+                new Clause(userBudget, cMoreThanOrEquals, "7"),
+                new Clause(agereduction, cEquals, "15%")
+        );
+
+        Rule destinationCommuneFrance = new Rule(this, "Destination Commune France",
+                new Clause(destination, cEquals ,"France"),
+                new Clause(date, cEquals ,"07/08/2021"),
+                new Clause(voyage, cEquals, "Direct"),
+                new Clause(compagnie, cEquals ,"Air_France Qatar_Airways Emirates_Airline Air_Algerie")
+        );
+
+        Rule destinationCommuneuk = new Rule(this, "Destination Commune UK",
+                new Clause(destination, cEquals ,"Royaume-Uni"),
+                new Clause(date, cEquals ,"22/09/2021"),
+                new Clause(voyage, cEquals, "Escale"),
+                new Clause(compagnie, cEquals ,"Air_France Qatar_Airways Emirates_Airline Air_Algerie")
+        );
+
+        Rule destinationalg = new Rule(this, "Destination Algerie",
+                new Clause(destination, cEquals ,"Algerie"),
+                new Clause(date, cEquals ,"22/08/2021"),
+                new Clause(compagnie, cEquals ,"Air_France Qatar_Airways Emirates_Airline")
+        );
+
+        Rule destinationalg2 = new Rule(this, "Destination Algerie 2",
+                new Clause(destination, cEquals ,"Algerie"),
+                new Clause(date, cEquals ,"21/07/2021"),
+                new Clause(compagnie, cEquals ,"Air_Algerie Qatar_Airways Emirates_Airline")
+        );
+
+        Rule destinationChine = new Rule(this, "Destination Chine",
+                new Clause(destination, cEquals, "Chine"),
+                new Clause(compagnie, cEquals, "Qatar_Airways")
+        );
+
+        Rule destinationChine2 = new Rule(this, "Destination Chine 2",
+                new Clause(destination, cEquals, "Chine"),
+                new Clause(compagnie, cEquals, "Emirates_Airline Air_France")
+        );
+
+        Rule destinationCanada = new Rule(this, "Destination Canada",
+                new Clause(destination, cEquals, "Canada"),
+                new Clause(depart, cEquals, "Algerie"),
+                new Clause(compagnie, cEquals, "Air_France")
+        );
+
+
+        Rule destinationCanada2 = new Rule(this, "Destination Canada 2",
+                new Clause(destination, cEquals, "Canada"),
+                new Clause(depart, cEquals, "Chine"),
+                new Clause(compagnie, cEquals, "Qatar_Airways Emirates_Airline")
+        );
+
+
+
         //Define rules
         Rule flagshipRange = new Rule(this, "check_flagship",
                 new Clause(userBudget, cMoreThanOrEquals, "700"),
