@@ -87,6 +87,18 @@ public class RuleBase {
                 "Shanghai-Pudong(CHN) Canton-Baiyun(CHN)");
         this.variableList.put((String) aeroport.name, aeroport);
 
+        RuleVariable nbbillets = new RuleVariable("NbBillets");
+        nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
+        this.variableList.put((String) nbbillets.name, nbbillets);
+
+        RuleVariable remiseBillet = new RuleVariable("RemiseSurBillets");
+        remiseBillet.setLabels("Avec Sans");
+        this.variableList.put((String) remiseBillet.name, remiseBillet);
+
+        RuleVariable remiseEscale = new RuleVariable("RemiseSurEscale");
+        remiseEscale.setLabels("Avec Sans");
+        this.variableList.put((String) remiseEscale.name, remiseEscale);
+
         RuleVariable saison = new RuleVariable("Saison");
         saison.setLabels("Saison_Estivale Hors_Saison_Estivale");
         this.variableList.put((String) saison.name, saison);
@@ -150,11 +162,13 @@ public class RuleBase {
 
         Rule destinationChine = new Rule(this, "Destination Chine",
                 new Clause(destination, cEquals, "Chine"),
+                new Clause(date, cEquals ,"22/07/2021"),
                 new Clause(compagnie, cEquals, "Qatar_Airways")
         );
 
         Rule destinationChine2 = new Rule(this, "Destination Chine 2",
                 new Clause(destination, cEquals, "Chine"),
+                new Clause(date, cEquals ,"28/09/2021"),
                 new Clause(compagnie, cEquals, "Emirates_Airline Air_France")
         );
 
@@ -171,6 +185,15 @@ public class RuleBase {
                 new Clause(compagnie, cEquals, "Qatar_Airways Emirates_Airline")
         );
 
+        Rule reductionBillet = new Rule(this, "Reduction sur billets",
+                new Clause(nbbillets, cMoreThanOrEquals, "4"),
+                new Clause(remiseBillet, cEquals, "Avec")
+        );
+
+        Rule reductionEscale = new Rule(this, "Reduction sur Escale",
+                new Clause(voyage, cEquals, "Escale"),
+                new Clause(remiseEscale, cEquals, "Avec")
+        );
 
 
         //Define rules
