@@ -1,5 +1,7 @@
 package gui;
 
+import app.rule.RuleBase;
+import app.rule.RuleVariable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -19,6 +21,8 @@ public class FlightsController extends HomeController implements Initializable {
         private StringProperty prix;
         private StringProperty duree;
         private StringProperty escale;
+
+        public Vols(){};
 
         public Vols(String c, String d, String p, String du, String e){
         this.company = new SimpleStringProperty(c);
@@ -90,27 +94,37 @@ public class FlightsController extends HomeController implements Initializable {
     }
 
     @FXML
-    ChoiceBox<String> departP,aeroport, destinationP;
+    ChoiceBox<String> departP,aeroport, destinationP = new ChoiceBox<String>();
     @FXML
-    Spinner<String> nbBillets, age;
+    Spinner<String> nbBillets, age = new Spinner<String>();
     @FXML
-    DatePicker departD, retourD;
+    DatePicker departD, retourD = new DatePicker();
     @FXML
-    TableView<Vols> tableRes;
+    TableView<Vols> tableRes = new TableView<Vols>();
     @FXML
-    TableColumn<Vols, String> Compagnie;
+    TableColumn<Vols, String> Compagnie = new TableColumn<Vols,String>();
     @FXML
-    TableColumn<Vols, String> Escales;
+    TableColumn<Vols, String> Escales = new TableColumn<Vols,String>();
     @FXML
-    TableColumn<Vols, String> Duree;
+    TableColumn<Vols, String> Duree = new TableColumn<Vols,String>();
     @FXML
-    TableColumn<Vols, String> Date;
+    TableColumn<Vols, String> Date = new TableColumn<Vols,String>();
     @FXML
-    TableColumn<Vols, String> Prix;
+    TableColumn<Vols, String> Prix = new TableColumn<Vols,String>();
+    @FXML
+    Button reserver = new Button();
+    //potentiel RuleBase qui contient les données
+    RuleBase rb = new RuleBase("Flights");
+
+    //Variables' data:
+    String[] departPData = ((RuleVariable)rb.getVariableList().get("Depart")).getLabels().split("[ ]+");
+    String[] aeroportData = ((RuleVariable)rb.getVariableList().get("Aeroport")).getLabels().split("[ ]+");
+
 
     //Doit contenir tous les resultats a afficher dans la tableveiw
-    public ObservableList<Vols> Resultats = FXCollections.observableArrayList();
+    private ObservableList<Vols> Resultats = FXCollections.observableArrayList();
 
+    private  Vols finalChoice = new Vols();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Compagnie.setCellValueFactory(data -> data.getValue().company);
@@ -118,5 +132,27 @@ public class FlightsController extends HomeController implements Initializable {
         Date.setCellValueFactory(data -> data.getValue().dateDepart);
         Prix.setCellValueFactory(data -> data.getValue().prix);
         Duree.setCellValueFactory(data -> data.getValue().duree);
+
+        tableRes.setOnMouseClicked(e ->{
+            event();
+        });
+        reserver.setDisable(true);
+        //disable the last button
     }
+
+    // Function send form
+    // le resultat sera stoké dans Resultats
+
+
+    //what to do when a row is selected
+    private void event(){
+        finalChoice = tableRes.getSelectionModel().getSelectedItems().get(0);
+        //disable button if no row selected
+        //else enable it
+        reserver.setDisable(false);
+    }
+
+    // Function Send final choice
+    //check if choice is not null/empty
+
 }

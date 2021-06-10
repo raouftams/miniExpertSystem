@@ -101,6 +101,6 @@
         </columns>
       </TableView>
       <TextArea fx:id="textLogs" layoutX="207.0" layoutY="443.0" prefHeight="114.0" prefWidth="541.0" />
-      <Button layoutX="648.0" layoutY="317.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="81.0" text="Reserver" />
+      <Button fx:id="reserver" layoutX="648.0" layoutY="317.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="81.0" text="Reserver" />
     </children>
 </AnchorPane>
