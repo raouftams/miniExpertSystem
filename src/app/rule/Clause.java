@@ -9,7 +9,8 @@ public class Clause {
     Condition  cond ;
     Boolean consequent ;  // true or false
     Boolean truth ;   // states = null(unknown), true or false
-    Clause(RuleVariable Lhs, Condition Cond, String Rhs)
+
+    public Clause(RuleVariable Lhs, Condition Cond, String Rhs)
     {
         lhs = Lhs ; cond = Cond ; rhs = Rhs ;
         lhs.addClauseRef(this) ;

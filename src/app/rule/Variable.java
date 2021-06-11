@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 public abstract class Variable {
-    String name ;
+    public String name ;
     String value ;
     int column ;
 
@@ -20,7 +20,7 @@ public abstract class Variable {
     // used by categorical only
     Vector labels ;
 
-    void setLabels(String Labels) {
+    public void setLabels(String Labels) {
         labels = new Vector() ;
         StringTokenizer tok = new StringTokenizer(Labels," ") ;
         while (tok.hasMoreTokens()) {

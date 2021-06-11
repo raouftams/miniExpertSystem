@@ -1,10 +1,10 @@
 package app.rule;
 
 public class Condition {
-    int index ;
-    String symbol ;
+    public int index ;
+    public String symbol ;
 
-    Condition(String Symbol) {
+    public Condition(String Symbol) {
         symbol = Symbol ;
         if (Symbol.equals("=")) index = 1 ;
         else if (Symbol.equals(">")) index = 2 ;

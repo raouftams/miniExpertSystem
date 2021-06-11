@@ -11,7 +11,7 @@ public class Rule {
     Boolean truth;       // states = (null=unknown, true, or false)
     boolean fired=false;
 
-    Rule(RuleBase Rb, String Name, Clause lhs, Clause rhs) {
+    public Rule(RuleBase Rb, String Name, Clause lhs, Clause rhs) {
         rb = Rb ;
         name = Name ;
         antecedents = new Clause[1] ;
@@ -34,7 +34,7 @@ public class Rule {
         truth = null ;
     }
 
-    Rule(RuleBase Rb, String Name, Clause lhs1, Clause lhs2, Clause rhs) {
+    public Rule(RuleBase Rb, String Name, Clause lhs1, Clause lhs2, Clause rhs) {
         rb = Rb ;
         name = Name ;
         antecedents = new Clause[2] ;
@@ -49,7 +49,7 @@ public class Rule {
         truth = null ;
     }
 
-    Rule(RuleBase Rb, String Name, Clause lhs1, Clause lhs2, Clause lhs3, Clause rhs) {
+    public Rule(RuleBase Rb, String Name, Clause lhs1, Clause lhs2, Clause lhs3, Clause rhs) {
         rb = Rb ;
         name = Name ;
         antecedents = new Clause[3] ;
