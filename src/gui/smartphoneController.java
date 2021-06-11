@@ -18,12 +18,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import app.Ressources;
 
 public class smartphoneController extends HomeController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
-    private RuleBase rb = new RuleBase("Smartphones");
+    private RuleBase rb = Ressources.SmartphooneRuleBase();
     @FXML
     private ChoiceBox<String> Brand, Utility, Secu, OS, UI, Range, Budget = new ChoiceBox<String>();
     @FXML
@@ -131,7 +132,7 @@ public class smartphoneController extends HomeController implements Initializabl
             this.displayArea.appendText(s);
         }
         this.displayArea.appendText("\n");
-        this.rb = new RuleBase("Smartphones");
+        this.rb = Ressources.SmartphooneRuleBase();
 
 
         Brand.setValue(null);

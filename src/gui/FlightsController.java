@@ -1,16 +1,19 @@
 package gui;
 
+import app.Ressources;
 import app.rule.RuleBase;
 import app.rule.RuleVariable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.net.URL;
+import java.util.EventListener;
 import java.util.ResourceBundle;
 
 public class FlightsController extends HomeController implements Initializable {
@@ -95,30 +98,15 @@ public class FlightsController extends HomeController implements Initializable {
 
     @FXML
     ChoiceBox<String> departP,aeroport, destinationP = new ChoiceBox<String>();
-    @FXML
     Spinner<String> nbBillets, age = new Spinner<String>();
-    @FXML
     DatePicker departD, retourD = new DatePicker();
-    @FXML
     TableView<Vols> tableRes = new TableView<Vols>();
-    @FXML
     TableColumn<Vols, String> Compagnie = new TableColumn<Vols,String>();
-    @FXML
     TableColumn<Vols, String> Escales = new TableColumn<Vols,String>();
-    @FXML
     TableColumn<Vols, String> Duree = new TableColumn<Vols,String>();
-    @FXML
     TableColumn<Vols, String> Date = new TableColumn<Vols,String>();
-    @FXML
     TableColumn<Vols, String> Prix = new TableColumn<Vols,String>();
-    @FXML
     Button reserver = new Button();
-    //potentiel RuleBase qui contient les données
-    RuleBase rb = new RuleBase("Flights");
-
-    //Variables' data:
-    String[] departPData = ((RuleVariable)rb.getVariableList().get("Depart")).getLabels().split("[ ]+");
-    String[] aeroportData = ((RuleVariable)rb.getVariableList().get("Aeroport")).getLabels().split("[ ]+");
 
 
     //Doit contenir tous les resultats a afficher dans la tableveiw
@@ -133,11 +121,24 @@ public class FlightsController extends HomeController implements Initializable {
         Prix.setCellValueFactory(data -> data.getValue().prix);
         Duree.setCellValueFactory(data -> data.getValue().duree);
 
+        RuleBase airAlg = Ressources.AirAlgerieRuleBase();
+        String[] airAlgDepart = ((RuleVariable)airAlg.getVariableList().get("Depart")).getLabels().split("[ ]+");
+        this.departP.getItems().addAll(airAlgDepart);
+        String[] airAlgDestination = ((RuleVariable)airAlg.getVariableList().get("Destination")).getLabels().split("[ ]+");
+        this.destinationP.getItems().addAll(airAlgDestination);
+        String[] airAlgAeoroports = ((RuleVariable)airAlg.getVariableList().get("Aeroports")).getLabels().split("[ ]+");
+        this.aeroport.getItems().addAll(airAlgAeoroports);
+
         tableRes.setOnMouseClicked(e ->{
             event();
         });
         reserver.setDisable(true);
         //disable the last button
+    }
+
+    public void departSelected(ActionEvent event){
+        String ville = this.departP.getValue();
+        this.destinationP.getItems().remove(ville);
     }
 
     // Function send form
