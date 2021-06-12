@@ -6,7 +6,7 @@ import java.util.Vector;
 
 public abstract class Variable {
     public String name ;
-    String value ;
+    public String value ;
     int column ;
 
     public Variable() {}

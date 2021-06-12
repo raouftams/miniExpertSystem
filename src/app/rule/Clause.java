@@ -1,5 +1,9 @@
 package app.rule;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Clause {
@@ -21,7 +25,7 @@ public class Clause {
 
     void addRuleRef(Rule ref) { ruleRefs.addElement(ref) ; }
 
-    Boolean check() {
+    Boolean check(){
         if (consequent.booleanValue() == true) return null ;
         if (lhs.value == null) {
             return truth = null ;  // can't check if variable value is undefined
@@ -43,6 +47,14 @@ public class Clause {
                 case 5: truth = new Boolean(lhs.value.compareTo(rhs) <= 0);
                     break;
                 case 6: truth = new Boolean(lhs.value.compareTo(rhs) >= 0);
+                    break;
+                case 7:
+                    try{
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        truth = sdf.parse(lhs.value).before(sdf.parse(rhs)) == true;
+                    }catch (ParseException e){
+                        e.printStackTrace();
+                    }
                     break;
             }
 

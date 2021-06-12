@@ -12,6 +12,7 @@ public class Condition {
         else if (Symbol.equals("!=")) index = 4 ;
         else if (Symbol.equals("<=")) index = 5 ;
         else if (Symbol.equals(">=")) index = 6 ;
+        else if (Symbol.equals("<=D")) index = 7;
         else index = -1 ;
     }
 
@@ -29,6 +30,9 @@ public class Condition {
             case 5: temp = "<=";
                 break;
             case 6: temp = ">=";
+                break;
+            case 7:
+                temp = "<=D";
         }
         return temp ;
     }
