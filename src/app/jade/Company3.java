@@ -1,4 +1,4 @@
-package app.jade;
+/*package app.jade;
 
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -61,3 +61,5 @@ public class Company3 extends Agent {
         });
     }
 }
+
+ */

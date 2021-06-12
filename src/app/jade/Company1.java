@@ -1,13 +1,20 @@
 package app.jade;
 
+import app.Ressources;
+import app.rule.RuleBase;
+import app.rule.RuleVariable;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.lang.acl.ACLMessage;
+import javafx.scene.control.TextArea;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.*;
 
 public class Company1 extends Agent {
     Object[] obj=null;
+    TextArea display = new TextArea();
 
     protected void setup(){
         try{
@@ -28,12 +35,33 @@ public class Company1 extends Agent {
                         try {
                             System.out.println("printing in AN1 : ");
                             obj=(Object[]) msg.getContentObject();
+                            String jsonString = "";
                             for (int i = 0; i < obj.length; i++) {
-                                System.out.println(obj[i]);
+                                jsonString += obj[i];
                             }
-
+                            JSONObject jsonObj = (JSONObject) new JSONParser().parse(jsonString);
+                            System.out.println("----------" + jsonString);
                             ACLMessage reply = msg.createReply();
-                            //systeme experts comes here probably
+
+                            //Initializing rulebase
+                            RuleBase rb = Ressources.AirAlgerieRuleBase();
+                            //affecting values to rulabase variables
+                            RuleVariable rvar = (RuleVariable)rb.getVariableList().get("Depart");
+                            rvar.setValue(String.valueOf(jsonObj.get("depart")));
+                            System.out.println("dagi");
+                            rvar = (RuleVariable)rb.getVariableList().get("Destination");
+                            rvar.setValue(String.valueOf(jsonObj.get("destination")));
+                            System.out.println("dagi1");
+                            rvar = (RuleVariable)rb.getVariableList().get("Date");
+                            String date = String.valueOf(jsonObj.get("dateD"));
+                            rvar.setValue(date);
+
+                            rvar = (RuleVariable)rb.getVariableList().get("check");
+                            rvar.setValue("checkDepart");
+                            System.out.println("dagi3");
+                            rb.forwardChain(display);
+                            System.out.println(rb.displayVariables());
+
                             reply.setContent("AN1 IS RESPONDING TO AGENT_CENTRAL");
                             myAgent.send(reply);
 

@@ -11,6 +11,7 @@ public class CentralAgent extends Agent {
     Object[] obj=null;
     Object simpleObj=null;
     Object[] arguments;
+
     protected void setup(){
         try{
             arguments= this.getArguments();
@@ -25,7 +26,7 @@ public class CentralAgent extends Agent {
             }
 
             //Message sending
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 1; i++) {
                 ACLMessage message= new ACLMessage(ACLMessage.INFORM);
                 message.setContentObject(obj);
                 String s="AN"+(i+1);

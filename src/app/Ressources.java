@@ -2,6 +2,7 @@ package app;
 
 import app.rule.*;
 
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Stack;
 import java.util.Vector;
@@ -14,6 +15,9 @@ public abstract class Ressources {
     private static Condition cMoreThan = new Condition(">") ;
     private static Condition cLessThanOrEquals = new Condition("<=");
     private static Condition cMoreThanOrEquals = new Condition(">=");
+    private static Condition cDateLessThan = new Condition("<=D");
+
+    private static String[] airAlgDates = {"14/06/2021", "22/06/2021", "07/07/2021", "24/10/2021", "21/11/2021", "26/11/2021"};
 
     public static RuleBase SmartphooneRuleBase(){
         RuleBase rb = new RuleBase("Smartphones");
@@ -52,79 +56,92 @@ public abstract class Ressources {
 
         //Define rules
         Rule flagshipRange = new Rule(rb, "check_flagship",
-                new Clause(userBudget, cMoreThanOrEquals, "700"),
-                new Clause(phoneRange, cEquals, "flagship")
+                new Clause[]{new Clause(userBudget, cMoreThanOrEquals, "700")},
+                new Clause[]{new Clause(phoneRange, cEquals, "flagship")}
         );
 
         Rule midRange = new Rule(rb, "check_midrange",
-                new Clause(userBudget, cLessThan, "700"),
-                new Clause(userBudget, cMoreThanOrEquals, "300"),
-                new Clause(phoneRange, cEquals, "midrange")
+                new Clause[]{
+                        new Clause(userBudget, cLessThan, "700"),
+                        new Clause(userBudget, cMoreThanOrEquals, "300")
+                },
+                new Clause[]{new Clause(phoneRange, cEquals, "midrange")}
         );
 
         Rule budgetRange = new Rule(rb, "check_budget",
-                new Clause(userBudget, cLessThan, "300"),
-                new Clause(phoneRange, cEquals, "budget")
+                new Clause[]{new Clause(userBudget, cLessThan, "300")},
+                new Clause[]{new Clause(phoneRange, cEquals, "budget")}
         );
 
         Rule highSecurity = new Rule(rb, "high_security",
-                new Clause(securityLevel, cEquals, "high"),
-                new Clause(os, cEquals, "ios")
+                new Clause[]{new Clause(securityLevel, cEquals, "high")},
+                new Clause[]{new Clause(os, cEquals, "ios")}
         );
 
         Rule midSecurity = new Rule(rb, "medium_security",
-                new Clause(securityLevel, cEquals, "medium"),
-                new Clause(os, cEquals, "android")
+                new Clause[]{new Clause(securityLevel, cEquals, "medium")},
+                new Clause[]{new Clause(os, cEquals, "android")}
         );
 
         Rule businessUtility = new Rule(rb, "business_utility",
-                new Clause(utility, cEquals, "business"),
-                new Clause(securityLevel, cEquals, "high")
+                new Clause[]{new Clause(utility, cEquals, "business")},
+                new Clause[]{new Clause(securityLevel, cEquals, "high")}
         );
 
         Rule gamingUtility = new Rule(rb, "gaming_utility",
-                new Clause(utility, cEquals, "gaming"),
-                new Clause(securityLevel, cEquals, "medium")
+                new Clause[]{new Clause(utility, cEquals, "gaming")},
+                new Clause[]{new Clause(securityLevel, cEquals, "medium")}
         );
 
         Rule communicationUtility = new Rule(rb, "communication_utility",
-                new Clause(utility, cEquals, "communication"),
-                new Clause(securityLevel, cEquals, "medium")
+                new Clause[]{new Clause(utility, cEquals, "communication")},
+                new Clause[]{new Clause(securityLevel, cEquals, "medium")}
         );
 
         Rule appleUi = new Rule(rb, "apple_os",
-                new Clause(os, cEquals, "ios"),
-                new Clause(brand, cEquals, "apple")
+                new Clause[]{new Clause(os, cEquals, "ios")},
+                new Clause[]{new Clause(brand, cEquals, "apple")}
         );
 
         Rule googleUi = new Rule(rb, "google_os",
-                new Clause(os, cEquals, "android"),
-                new Clause(ui, cEquals, "none"),
-                new Clause(brand, cEquals, "google")
+                new Clause[]{
+                        new Clause(os, cEquals, "android"),
+                        new Clause(ui, cEquals, "none")
+                },
+                new Clause[]{new Clause(brand, cEquals, "google")}
         );
 
         Rule samsungUi = new Rule(rb, "samsung_ui",
-                new Clause(os, cEquals, "android"),
-                new Clause(ui, cEquals, "oneui"),
-                new Clause(brand, cEquals, "samsung")
+                new Clause[]{
+                        new Clause(os, cEquals, "android"),
+                        new Clause(ui, cEquals, "oneui")
+                },
+                new Clause[]{new Clause(brand, cEquals, "samsung")}
         );
 
         Rule xiaomiUi = new Rule(rb, "xiaomi_ui",
-                new Clause(os, cEquals, "android"),
-                new Clause(ui, cEquals, "miui"),
-                new Clause(brand, cEquals, "xiaomi")
+                new Clause[]{
+                        new Clause(os, cEquals, "android"),
+                        new Clause(ui, cEquals, "miui")
+                },
+                new Clause[]{new Clause(brand, cEquals, "xiaomi")}
         );
 
         Rule gamingPhone = new Rule(rb, "gaming_phone",
-                new Clause(os, cEquals, "android"),
-                new Clause(utility, cEquals, "gaming"),
-                new Clause(brand, cEquals, "asus")
+                new Clause[]{
+                        new Clause(os, cEquals, "android"),
+                        new Clause(utility, cEquals, "gaming")
+                },
+                new Clause[]{new Clause(brand, cEquals, "asus")}
         );
 
         return rb;
     }
 
     public static RuleBase AirAlgerieRuleBase(){
+        for (int i = 0; i < airAlgDates.length; i++) {
+            System.out.println(airAlgDates[i]);
+        }
         RuleBase rb = new RuleBase("Air algerie");
 
         rb.goalClauseStack = new Stack() ;
@@ -177,7 +194,7 @@ public abstract class Ressources {
 
         RuleVariable date = new RuleVariable("Date");
         agereduction.setLabels("22/09/2021 07/08/2021 11/06/2021 24/10/2021 21/11/2021 26/11/2021");
-        rb.variableList.put((String) agereduction.name, agereduction);
+        rb.variableList.put((String) date.name, date);
 
         RuleVariable voyage = new RuleVariable("Voyage");
         voyage.setLabels("Escale Direct");
@@ -185,76 +202,100 @@ public abstract class Ressources {
 
         //Define rules pt2
         Rule departAlger = new Rule(rb, "Depart Alger",
-                new Clause(check, cEquals, "checkDepart"),
-                new Clause(depart, cEquals, "Alger"),
-                new Clause(check, cEquals, "checkDestination")
+                new Clause[]{
+                    new Clause(check, cEquals, "checkDepart"),
+                    new Clause(depart, cEquals, "Alger")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDestination")}
         );
         Rule departParis = new Rule(rb, "Depart Paris",
-                new Clause(check, cEquals, "checkDepart"),
-                new Clause(depart, cEquals, "Paris"),
-                new Clause(check, cEquals, "checkDestination")
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDepart"),
+                        new Clause(depart, cEquals, "Paris")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDestination")}
         );
 
         Rule departLondre = new Rule(rb, "Depart Londre",
-                new Clause(check, cEquals, "checkDepart"),
-                new Clause(depart, cEquals, "Londre"),
-                new Clause(check, cEquals, "checkDestination")
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDepart"),
+                        new Clause(depart, cEquals, "Londre")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDestination")}
         );
 
         Rule departMontreal = new Rule(rb, "Depart Montreal",
-                new Clause(check, cEquals, "checkDepart"),
-                new Clause(depart, cEquals, "Montreal"),
-                new Clause(check, cEquals, "checkDestination")
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDepart"),
+                        new Clause(depart, cEquals, "Montreal")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDestination")}
         );
 
         Rule destinationAlger = new Rule(rb, "Destination Alger",
-                new Clause(check, cEquals, "checkDestination"),
-                new Clause(destination, cEquals, "Alger"),
-                new Clause(check, cEquals, "checkDate")
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDestination"),
+                        new Clause(destination, cEquals, "Alger")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDate")}
         );
 
         Rule destinationParis = new Rule(rb, "Destination Paris",
-                new Clause(check, cEquals, "checkDestination"),
-                new Clause(destination, cEquals, "Paris"),
-                new Clause(depart, cEquals, "Alger"),
-                new Clause(check, cEquals, "checkDate")
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDestination"),
+                        new Clause(destination, cEquals, "Paris"),
+                        new Clause(depart, cEquals, "Alger")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDate")}
         );
 
         Rule destinationLondre = new Rule(rb, "Destination Londre",
-                new Clause(check, cEquals, "checkDestination"),
-                new Clause(destination, cEquals, "Londre"),
-                new Clause(depart, cEquals, "Alger"),
-                new Clause(check, cEquals, "checkDate")
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDestination"),
+                        new Clause(destination, cEquals, "Londre"),
+                        new Clause(depart, cEquals, "Alger")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDate")}
         );
 
         Rule destinationMontreal = new Rule(rb, "Destination Montreal",
-                new Clause(check, cEquals, "checkDestination"),
-                new Clause(destination, cEquals, "Montreal"),
-                new Clause(depart, cEquals, "Alger"),
-                new Clause(check, cEquals, "checkDate")
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDestination"),
+                        new Clause(destination, cEquals, "Montreal"),
+                        new Clause(depart, cEquals, "Alger")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDate")}
         );
 
+        for (int i = 0; i < airAlgDates.length; i++) {
+            Rule checkDateDepart = new Rule(rb, "Check_equal_date_depart" + i,
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkDate"),
+                            new Clause(date, cEquals, airAlgDates[i])
+                    },
+                    new Clause[]{new Clause(check, cEquals, "checkPlaces")}
+            );
+        }
 
-        Rule AgeePriceReduction = new Rule(rb, "reduction for elders",
-                new Clause(age, cMoreThanOrEquals, "75"),
-                new Clause(agereduction, cEquals, "10%")
+        for (int i = 0; i < airAlgDates.length; i++) {
+            Rule checkDateDepart = new Rule(rb, "Check_next_date_depart" + i,
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkDate"),
+                            new Clause(date, cDateLessThan, airAlgDates[i])
+                    },
+                    new Clause[]{
+                            new Clause(date, cEquals, airAlgDates[i]),
+                            new Clause(check, cEquals, "checkPlaces")
+                    }
+            );
+        }
+
+
+        Rule checkDateDepart = new Rule(rb, "Go_check_places",
+                new Clause[]{new Clause(check, cEquals, "setDate")},
+                new Clause[]{new Clause(check, cEquals, "checkPlaces")}
         );
 
-        Rule EnfPriceReduction = new Rule(rb, "reduction for children",
-                new Clause(age, cLessThan, "7"),
-                new Clause(agereduction, cEquals, "20%")
-        );
-
-
-        Rule reductionBillet = new Rule(rb, "Reduction sur billets",
-                new Clause(nbbillets, cMoreThanOrEquals, "4"),
-                new Clause(remiseBillet, cEquals, "Avec")
-        );
-
-        Rule reductionEscale = new Rule(rb, "Reduction sur Escale",
-                new Clause(voyage, cEquals, "Escale"),
-                new Clause(remiseEscale, cEquals, "Avec")
-        );
 
         return rb;
 
