@@ -1,8 +1,10 @@
 package gui;
 
 import app.Ressources;
+import app.jade.Form;
 import app.rule.RuleBase;
 import app.rule.RuleVariable;
+import jade.Boot;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -11,12 +13,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import org.json.simple.*;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.EventListener;
 import java.util.ResourceBundle;
 
 public class FlightsController extends HomeController implements Initializable {
+
 
     public class Vols{
         private StringProperty company;
@@ -98,14 +105,18 @@ public class FlightsController extends HomeController implements Initializable {
 
     @FXML
     ChoiceBox<String> departP,aeroport, destinationP = new ChoiceBox<String>();
+    @FXML
     Spinner<String> nbBillets, age = new Spinner<String>();
+    @FXML
     DatePicker departD, retourD = new DatePicker();
+    @FXML
     TableView<Vols> tableRes = new TableView<Vols>();
     TableColumn<Vols, String> Compagnie = new TableColumn<Vols,String>();
     TableColumn<Vols, String> Escales = new TableColumn<Vols,String>();
     TableColumn<Vols, String> Duree = new TableColumn<Vols,String>();
     TableColumn<Vols, String> Date = new TableColumn<Vols,String>();
     TableColumn<Vols, String> Prix = new TableColumn<Vols,String>();
+    @FXML
     Button reserver = new Button();
 
 
@@ -143,6 +154,36 @@ public class FlightsController extends HomeController implements Initializable {
 
     // Function send form
     // le resultat sera stoké dans Resultats
+    public void sendData(ActionEvent actionEvent) throws IOException {
+        Form formulaire = new Form(this.departP.getValue(),
+                this.destinationP.getValue(),
+                this.departD.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                "",
+                String.valueOf(this.nbBillets.getValue()),
+                ""
+        );
+        /*JSONObject obj = new JSONObject();
+        obj.put("depart", this.departP.getValue());
+        obj.put("destination", this.destinationP.getValue());
+        System.out.println(this.departD.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        obj.put("date", this.departD.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        obj.put("nbPlace", String.valueOf(this.nbBillets.getValue()));
+
+        StringWriter out = new StringWriter();
+        obj.writeJSONString(out);
+        String args = out.toString();
+        System.out.println(args);
+
+
+         */
+        String[] jadearg= new String[2];
+        StringBuffer SbAgent=new StringBuffer();
+        SbAgent.append("AC:app.jade.CentralAgent(" + formulaire.toString() + ");");
+        SbAgent.append("AN1:app.jade.Company1;");
+        jadearg[0]="-gui";
+        jadearg[1]=SbAgent.toString();
+        Boot.main(jadearg);
+    }
 
 
     //what to do when a row is selected
