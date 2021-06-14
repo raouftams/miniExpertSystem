@@ -1,7 +1,5 @@
 package app.rule;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -22,6 +20,7 @@ public class Clause {
         truth = null ;
         consequent = new Boolean(false) ;
     }
+    // TOdo: creer des tableaux de vols
 
     void addRuleRef(Rule ref) { ruleRefs.addElement(ref) ; }
 

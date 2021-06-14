@@ -162,20 +162,19 @@ public class FlightsController extends HomeController implements Initializable {
                 String.valueOf(this.nbBillets.getValue()),
                 ""
         );
+
         /*JSONObject obj = new JSONObject();
         obj.put("depart", this.departP.getValue());
         obj.put("destination", this.destinationP.getValue());
         System.out.println(this.departD.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         obj.put("date", this.departD.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         obj.put("nbPlace", String.valueOf(this.nbBillets.getValue()));
-
         StringWriter out = new StringWriter();
         obj.writeJSONString(out);
         String args = out.toString();
         System.out.println(args);
-
-
          */
+
         String[] jadearg= new String[2];
         StringBuffer SbAgent=new StringBuffer();
         SbAgent.append("AC:app.jade.CentralAgent(" + formulaire.toString() + ");");

@@ -257,6 +257,121 @@ public abstract class Ressources {
                 },
                 new Clause[]{new Clause(check, cEquals, "checkDate")}
         );
+        //TODO: ajouter les regles d'escales
+
+        //Alger vs Londre
+        Rule voleAlgerLondre = new Rule(rb, "Vole de Alger vers Londre",
+                new Clause[]{
+                        new Clause(depart, cEquals, "Alger"),
+                        new Clause(destination,cEquals, "Londre")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+        Rule voleLondreAlger = new Rule(rb, "Vole de Londre vers Alger",
+                new Clause[]{
+                        new Clause(depart, cEquals, "Londre"),
+                        new Clause(destination,cEquals, "Alger")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+
+        //Alger vs Paris
+
+        Rule voleAlgerParis = new Rule(rb, "Vole de Alger vers Paris",
+                new Clause[]{
+                        new Clause(depart, cEquals, "Alger"),
+                        new Clause(destination,cEquals, "Paris")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Direct")
+                });
+
+        Rule voleParisAlger = new Rule(rb, "Vole de Paris vers Alger",
+                new Clause[]{
+                        new Clause(depart, cEquals, "Paris"),
+                        new Clause(destination,cEquals, "Alger")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Direct")
+                });
+
+        //Alger vs Montreal
+
+        Rule voleAlgerMontreal = new Rule(rb, "Vole de Alger vers Montreal",
+                new Clause[]{
+                        new Clause(depart, cEquals, "Alger"),
+                        new Clause(destination,cEquals, "Montreal")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+        Rule voleMontrealAlger = new Rule(rb, "Vole de Montreal vers Alger",
+                new Clause[]{
+                        new Clause(depart, cEquals, "Montreal"),
+                        new Clause(destination,cEquals, "Alger")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+
+        //Londre vs Pris
+        Rule voleLondreParis = new Rule(rb, "Vole de Londre vers Paris",
+                new Clause[]{
+                        new Clause(depart, cEquals, "Londre"),
+                        new Clause(destination,cEquals, "Paris")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Direct")
+                });
+        Rule voleParisLondre = new Rule(rb, "Vole de Paris vers Londre",
+                new Clause[]{
+                        new Clause(depart, cEquals, "Paris"),
+                        new Clause(destination,cEquals, "Londre")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Direct")
+                });
+
+        //Londre vs Montreal
+        Rule voleLondreMontreal = new Rule(rb, "Vole de Londre vers Montreal",
+                new Clause[]{
+                        new Clause(depart, cEquals, "Londre"),
+                        new Clause(destination,cEquals, "Montreal")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+        Rule voleMontrealLondre = new Rule(rb, "Vole de Montreal vers Londre",
+                new Clause[]{
+                        new Clause(depart, cEquals, "Montreal"),
+                        new Clause(destination,cEquals, "Londre")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+
+        //Paris vs Montreal
+        Rule voleParisMontreal = new Rule(rb, "Vole de Paris vers Montreal",
+                new Clause[]{
+                        new Clause(depart, cEquals, "Paris"),
+                        new Clause(destination,cEquals, "Montreal")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+        Rule voleMontrealParis = new Rule(rb, "Vole de Montreal vers Paris",
+                new Clause[]{
+                        new Clause(depart, cEquals, "Montreal"),
+                        new Clause(destination,cEquals, "Paris")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+
+
+
 
         Rule destinationMontreal = new Rule(rb, "Destination Montreal",
                 new Clause[]{
