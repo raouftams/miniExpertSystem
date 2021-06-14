@@ -9,15 +9,15 @@ import java.util.Vector;
 
 public abstract class Ressources {
 
-    private static Condition cEquals = new Condition("=") ;
-    private static Condition cNotEquals = new Condition("!=") ;
-    private static Condition cLessThan = new Condition("<") ;
-    private static Condition cMoreThan = new Condition(">") ;
-    private static Condition cLessThanOrEquals = new Condition("<=");
-    private static Condition cMoreThanOrEquals = new Condition(">=");
-    private static Condition cDateLessThan = new Condition("<=D");
+    private static final Condition cEquals = new Condition("=") ;
+    private static final Condition cNotEquals = new Condition("!=") ;
+    private static final Condition cLessThan = new Condition("<") ;
+    private static final Condition cMoreThan = new Condition(">") ;
+    private static final Condition cLessThanOrEquals = new Condition("<=");
+    private static final Condition cMoreThanOrEquals = new Condition(">=");
+    private static final Condition cDateLessThan = new Condition("<=D");
 
-    private static String[] airAlgDates = {"14/06/2021", "22/06/2021", "07/07/2021", "24/10/2021", "21/11/2021", "26/11/2021"};
+    private static final String[] airAlgDates = {"14/06/2021", "22/06/2021", "07/07/2021", "24/10/2021", "21/11/2021", "26/11/2021"};
 
     public static RuleBase SmartphooneRuleBase(){
         RuleBase rb = new RuleBase("Smartphones");
@@ -139,9 +139,6 @@ public abstract class Ressources {
     }
 
     public static RuleBase AirAlgerieRuleBase(){
-        for (int i = 0; i < airAlgDates.length; i++) {
-            System.out.println(airAlgDates[i]);
-        }
         RuleBase rb = new RuleBase("Air algerie");
 
         rb.goalClauseStack = new Stack() ;
@@ -404,7 +401,6 @@ public abstract class Ressources {
                     }
             );
         }
-
 
         Rule checkDateDepart = new Rule(rb, "Go_check_places",
                 new Clause[]{new Clause(check, cEquals, "setDate")},
