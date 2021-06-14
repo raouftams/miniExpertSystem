@@ -106,15 +106,20 @@ public class FlightsController extends HomeController implements Initializable {
     @FXML
     ChoiceBox<String> departP,aeroport, destinationP = new ChoiceBox<String>();
     @FXML
-    Spinner<String> nbBillets, age = new Spinner<String>();
+    Spinner<String> nbAgees, nbAdultes, nbAdolescents, nbEnfants = new Spinner<String>();
     @FXML
     DatePicker departD, retourD = new DatePicker();
     @FXML
     TableView<Vols> tableRes = new TableView<Vols>();
+    @FXML
     TableColumn<Vols, String> Compagnie = new TableColumn<Vols,String>();
+    @FXML
     TableColumn<Vols, String> Escales = new TableColumn<Vols,String>();
+    @FXML
     TableColumn<Vols, String> Duree = new TableColumn<Vols,String>();
+    @FXML
     TableColumn<Vols, String> Date = new TableColumn<Vols,String>();
+    @FXML
     TableColumn<Vols, String> Prix = new TableColumn<Vols,String>();
     @FXML
     Button reserver = new Button();
@@ -159,7 +164,7 @@ public class FlightsController extends HomeController implements Initializable {
                 this.destinationP.getValue(),
                 this.departD.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                 "",
-                String.valueOf(this.nbBillets.getValue()),
+                String.valueOf(this.nbAdultes.getValue()),
                 ""
         );
 
