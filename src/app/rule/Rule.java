@@ -74,7 +74,7 @@ public class Rule {
         fired = true ;
         // set the variable value and update clauses
         for (int i = 0; i < consequent.length; i++) {
-            consequent[0].lhs.setValue(consequent[0].rhs);
+            consequent[i].lhs.setValue(consequent[i].rhs);
             // now retest any rules whose clauses just changed
             checkRules(consequent[i].lhs.clauseRefs);
         }
