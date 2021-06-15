@@ -15,8 +15,12 @@ public abstract class Ressources {
     private static final Condition cMoreThanOrEquals = new Condition(">=");
     private static final Condition cDateLessThan = new Condition("<=D");
 
+    //Air algerie data
     private static final String[] airAlgDates = {"14/06/2021", "22/06/2021", "07/07/2021", "24/10/2021", "21/11/2021", "26/11/2021"};
     private static final String[] airAlgVilles = {"Alger", "Paris", "Montreal", "Londre"};
+    public static ArrayList<Vol> airAlgvols = generateVols(airAlgDates, airAlgVilles);
+
+    //air france data
 
     public static RuleBase SmartphooneRuleBase(){
         RuleBase rb = new RuleBase("Smartphones");
@@ -157,8 +161,6 @@ public abstract class Ressources {
     }
 
     public static RuleBase AirAlgerieRuleBase(){
-        ArrayList<Vol> vols = generateVols(airAlgDates, airAlgVilles);
-
         RuleBase rb = new RuleBase("Air algerie");
 
         rb.goalClauseStack = new Stack() ;
@@ -193,6 +195,22 @@ public abstract class Ressources {
         nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
         rb.variableList.put(nbbillets.name, nbbillets);
 
+        RuleVariable nbEnfants = new RuleVariable("NbEnfants");
+        nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
+        rb.variableList.put(nbEnfants.name, nbEnfants);
+
+        RuleVariable nbAdulte = new RuleVariable("NbAdultes");
+        nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
+        rb.variableList.put(nbAdulte.name, nbAdulte);
+
+        RuleVariable nbAdolescents = new RuleVariable("NbAdolescents");
+        nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
+        rb.variableList.put(nbAdolescents.name, nbAdolescents);
+
+        RuleVariable nbAged = new RuleVariable("NbAged");
+        nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
+        rb.variableList.put(nbAged.name, nbAged);
+
         RuleVariable remiseBillet = new RuleVariable("RemiseSurBillets");
         remiseBillet.setLabels("Avec Sans");
         rb.variableList.put(remiseBillet.name, remiseBillet);
@@ -210,11 +228,11 @@ public abstract class Ressources {
         rb.variableList.put(agereduction.name, agereduction);
 
         RuleVariable date = new RuleVariable("Date");
-        agereduction.setLabels("22/09/2021 07/08/2021 11/06/2021 24/10/2021 21/11/2021 26/11/2021");
+        date.setLabels("22/09/2021 07/08/2021 11/06/2021 24/10/2021 21/11/2021 26/11/2021");
         rb.variableList.put(date.name, date);
 
-        RuleVariable dateR = new RuleVariable("DateRetour");
-        agereduction.setLabels("22/09/2021 07/08/2021 11/06/2021 24/10/2021 21/11/2021 26/11/2021");
+        RuleVariable dateR = new RuleVariable("DateR");
+        dateR.setLabels("22/09/2021 07/08/2021 11/06/2021 24/10/2021 21/11/2021 26/11/2021");
         rb.variableList.put(dateR.name, dateR);
 
         RuleVariable voyage = new RuleVariable("Voyage");
@@ -297,7 +315,10 @@ public abstract class Ressources {
                             new Clause(check, cEquals, "checkDate"),
                             new Clause(date, cEquals, airAlgDates[i])
                     },
-                    new Clause[]{new Clause(check, cEquals, "checkDateRetour")}
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkDateRetour"),
+                            new Clause(price, cEquals, "200")
+                    }
             );
         }
 
@@ -310,7 +331,8 @@ public abstract class Ressources {
                     },
                     new Clause[]{
                             new Clause(check, cEquals, "checkDateRetour"),
-                            new Clause(date, cEquals, airAlgDates[i])
+                            new Clause(date, cEquals, airAlgDates[i]),
+                            new Clause(price, cEquals, "200")
                     }
             );
         }
@@ -354,13 +376,14 @@ public abstract class Ressources {
         }
 
         //regles de vérification des places
-        for (Vol v: vols) {
+        for (Vol v: airAlgvols) {
             Rule checkNbPlaces = new Rule(rb, "check_nb_places",
                     new Clause[]{
                             new Clause(check, cEquals, "checkPlaces"),
                             new Clause(depart, cEquals, v.depart),
                             new Clause(destination, cEquals, v.destination),
-                            new Clause(date, cEquals, v.dateDepart)
+                            new Clause(date, cEquals, v.dateDepart),
+                            new Clause(nbbillets, cLessThan, String.valueOf(v.nbPlaces))
                     },
                     new Clause[]{
                             new Clause(check, cEquals, "checkEscale")
@@ -495,6 +518,26 @@ public abstract class Ressources {
                 new Clause[]{
                         new Clause(voyage, cEquals, "Escale")
                 });
+
+        Rule reductionEscaleDouble = new Rule(rb, "reduction escale",
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale"),
+                        new Clause(dateR, cNotEquals, "null")
+                },
+                new Clause[]{
+                        new Clause(price, cEquals, "350")
+                }
+        );
+
+        Rule reductionEscale = new Rule(rb, "reduction escale",
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale"),
+                        new Clause(dateR, cEquals, "null")
+                },
+                new Clause[]{
+                        new Clause(price, cEquals, "150")
+                }
+        );
 
         return rb;
 

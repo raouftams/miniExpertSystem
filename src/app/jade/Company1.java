@@ -48,13 +48,28 @@ public class Company1 extends Agent {
                             //affecting values to rulabase variables
                             RuleVariable rvar = (RuleVariable)rb.getVariableList().get("Depart");
                             rvar.setValue(String.valueOf(jsonObj.get("depart")));
-                            System.out.println("dagi");
+
                             rvar = (RuleVariable)rb.getVariableList().get("Destination");
                             rvar.setValue(String.valueOf(jsonObj.get("destination")));
-                            System.out.println("dagi1");
+
+                            rvar = (RuleVariable)rb.getVariableList().get("DateR");
+                            rvar.setValue(String.valueOf(jsonObj.get("dateR")));
+
                             rvar = (RuleVariable)rb.getVariableList().get("Date");
                             String date = String.valueOf(jsonObj.get("dateD"));
                             rvar.setValue(date);
+
+                            rvar = (RuleVariable)rb.getVariableList().get("NbBillets");
+                            rvar.setValue(String.valueOf(jsonObj.get("nbBillets")));
+
+                            rvar = (RuleVariable)rb.getVariableList().get("NbEnfants");
+                            rvar.setValue(String.valueOf(jsonObj.get("nbEnfants")));
+
+                            rvar = (RuleVariable)rb.getVariableList().get("NbAdultes");
+                            rvar.setValue(String.valueOf(jsonObj.get("nbAdultes")));
+
+                            rvar = (RuleVariable)rb.getVariableList().get("NbAged");
+                            rvar.setValue(String.valueOf(jsonObj.get("nbPerAgee")));
 
                             rvar = (RuleVariable)rb.getVariableList().get("check");
                             rvar.setValue("checkDepart");
@@ -66,7 +81,7 @@ public class Company1 extends Agent {
                             myAgent.send(reply);
 
                         }catch (Exception e){
-                            System.out.println(e);
+                            e.printStackTrace();
                         }
 
                     }

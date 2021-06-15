@@ -106,7 +106,7 @@ public class FlightsController extends HomeController implements Initializable {
     @FXML
     ChoiceBox<String> departP,aeroport, destinationP = new ChoiceBox<String>();
     @FXML
-    Spinner<String> nbAgees, nbAdultes, nbAdolescents, nbEnfants = new Spinner<String>();
+    Spinner<String> nbAgees= new Spinner<String>(), nbAdultes= new Spinner<String>(), nbAdolescents= new Spinner<String>(), nbEnfants = new Spinner<String>();
     @FXML
     DatePicker departD, retourD = new DatePicker();
     @FXML
@@ -154,18 +154,21 @@ public class FlightsController extends HomeController implements Initializable {
 
     public void departSelected(ActionEvent event){
         String ville = this.departP.getValue();
-        this.destinationP.getItems().remove(ville);
+        //this.destinationP.getItems().remove(ville);
     }
 
     // Function send form
     // le resultat sera stoké dans Resultats
     public void sendData(ActionEvent actionEvent) throws IOException {
+        System.out.println(String.valueOf(this.nbAdolescents.getValue()));
         Form formulaire = new Form(this.departP.getValue(),
                 this.destinationP.getValue(),
                 this.departD.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                "",
+                this.retourD.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                this.aeroport.getValue(),
                 String.valueOf(this.nbAdultes.getValue()),
-                ""
+                String.valueOf(this.nbEnfants.getValue()),
+                String.valueOf(this.nbAgees.getValue())
         );
 
         /*JSONObject obj = new JSONObject();

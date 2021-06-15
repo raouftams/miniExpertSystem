@@ -64,7 +64,7 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></ChoiceBox>
-      <Spinner fx:id="NbAdultes" min="0" max="9" initialValue="0" editable="true" layoutX="292.0" layoutY="158.0" prefHeight="25.0" prefWidth="150.0" style="-fx-background-color: #fff; -fx-border-color: #58A4B0; -fx-border-radius: 5px;">
+      <Spinner fx:id="nbAdultes" min="0" max="9" initialValue="0" editable="true" layoutX="292.0" layoutY="158.0" prefHeight="25.0" prefWidth="150.0" style="-fx-background-color: #fff; -fx-border-color: #58A4B0; -fx-border-radius: 5px;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Spinner>
