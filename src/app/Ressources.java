@@ -17,8 +17,21 @@ public abstract class Ressources {
 
     //Air algerie data
     private static final String[] airAlgDates = {"14/06/2021", "22/06/2021", "07/07/2021", "24/10/2021", "21/11/2021", "26/11/2021"};
-    private static final String[] airAlgVilles = {"Alger", "Paris", "Montreal", "Londre"};
+    public static final String[] airAlgVilles = {"Alger", "Paris", "Montreal", "Londre"};
+    public static final String[] airAlgAirports = {"Charles_De_Gaulle(FRA)", "Montréal_Mirabel(CAN)", "Houari_Boumédiène(DZA)", "Heathrow(GBA)"};
     public static ArrayList<Vol> airAlgvols = generateVols(airAlgDates, airAlgVilles);
+
+    //Air France data
+    private static final String[] airFRDates = {"07/07/2021", "24/10/2021", "21/11/2021", "26/11/2021"};
+    public static final String[] airFRVilles = {"Alger", "Paris", "Berlin", "Stockholm"};
+    public static final String[] airFRAirports = {"Charles_De_Gaulle(FRA)", "Willy Brandt (BER)", "Houari_Boumédiène(DZA)", "Arlanda Airport(Suède)"};
+    public static ArrayList<Vol> airFRvols = generateVols(airFRDates, airFRVilles);
+
+    //Air british data
+    private static final String[] airGBADates = {"07/07/2021", "24/10/2021", "21/11/2021", "26/11/2021"};
+    public static final String[] airGBAVilles = {"Londre", "Paris", "Amsterdam", "Madrid"};
+    public static final String[] airGBAAirports = {"Charles_De_Gaulle(FRA)", "Willy Brandt (BER)", "Houari_Boumédiène(DZA)", "Arlanda Airport(Suède)"};
+    public static ArrayList<Vol> airGBAvols = generateVols(airGBADates, airGBAVilles);
 
     //air france data
 
@@ -543,5 +556,682 @@ public abstract class Ressources {
 
     }
 
+    public static RuleBase AirFranceRuleBase(){
+        RuleBase rb = new RuleBase("AirFrance");
+
+        rb.goalClauseStack = new Stack() ;
+        rb.variableList = new Hashtable() ;
+        rb.ruleList = new Vector() ;
+
+        RuleVariable check = new RuleVariable("check");
+        check.setLabels("checkDepart checkDestination checkDate checkNbrBillets");
+        rb.variableList.put(check.name, check);
+
+        RuleVariable destination = new RuleVariable("Destination");
+        destination.setLabels("Paris Stockholm Berlin Alger");
+        rb.variableList.put(destination.name, destination);
+
+        RuleVariable depart = new RuleVariable("Depart");
+        depart.setLabels("Paris Stockholm Berlin Alger");
+        rb.variableList.put(depart.name, depart);
+
+        RuleVariable age = new RuleVariable("Age");
+        age.setLabels("2 4 6 8 10 12 14 16 20 25 30 55 70 76 80");
+        rb.variableList.put(age.name, age);
+
+        RuleVariable aeroport = new RuleVariable("Aeroports");
+        aeroport.setLabels("");
+        rb.variableList.put(aeroport.name, aeroport);
+
+        RuleVariable nbbillets = new RuleVariable("NbBillets");
+        nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
+        rb.variableList.put(nbbillets.name, nbbillets);
+
+        RuleVariable nbEnfants = new RuleVariable("NbEnfants");
+        nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
+        rb.variableList.put(nbEnfants.name, nbEnfants);
+
+        RuleVariable nbAdulte = new RuleVariable("NbAdultes");
+        nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
+        rb.variableList.put(nbAdulte.name, nbAdulte);
+
+        RuleVariable nbAdolescents = new RuleVariable("NbAdolescents");
+        nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
+        rb.variableList.put(nbAdolescents.name, nbAdolescents);
+
+        RuleVariable nbAged = new RuleVariable("NbAged");
+        nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
+        rb.variableList.put(nbAged.name, nbAged);
+
+        RuleVariable remiseBillet = new RuleVariable("RemiseSurBillets");
+        remiseBillet.setLabels("Avec Sans");
+        rb.variableList.put(remiseBillet.name, remiseBillet);
+
+        RuleVariable remiseEscale = new RuleVariable("RemiseSurEscale");
+        remiseEscale.setLabels("Avec Sans");
+        rb.variableList.put(remiseEscale.name, remiseEscale);
+
+        RuleVariable saison = new RuleVariable("Saison");
+        saison.setLabels("Saison_Estivale Hors_Saison_Estivale");
+        rb.variableList.put(saison.name, saison);
+
+        RuleVariable agereduction = new RuleVariable("AgeReduction");
+        agereduction.setLabels("10% 15% 20%");
+        rb.variableList.put(agereduction.name, agereduction);
+
+        RuleVariable date = new RuleVariable("Date");
+        date.setLabels("22/09/2021 07/08/2021 11/06/2021 24/10/2021 21/11/2021 26/11/2021");
+        rb.variableList.put(date.name, date);
+
+        RuleVariable dateR = new RuleVariable("DateR");
+        dateR.setLabels("22/09/2021 07/08/2021 11/06/2021 24/10/2021 21/11/2021 26/11/2021");
+        rb.variableList.put(dateR.name, dateR);
+
+        RuleVariable voyage = new RuleVariable("Voyage");
+        voyage.setLabels("Escale Direct");
+        rb.variableList.put(voyage.name, voyage);
+
+        RuleVariable price = new RuleVariable("Prix");
+        price.setLabels("200");
+        rb.variableList.put(price.name, price);
+
+        //Define rules pt2
+        Rule departAlger = new Rule(rb, "Depart Alger",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDepart"),
+                        new Clause(depart, cEquals, "Alger")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDestination")}
+        );
+        Rule departParis = new Rule(rb, "Depart Paris",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDepart"),
+                        new Clause(depart, cEquals, "Paris")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDestination")}
+        );
+
+        Rule departLondre = new Rule(rb, "Depart Berlin",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDepart"),
+                        new Clause(depart, cEquals, "Berlin")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDestination")}
+        );
+
+        Rule departMontreal = new Rule(rb, "Depart Stockholm",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDepart"),
+                        new Clause(depart, cEquals, "Stockholm")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDestination")}
+        );
+
+        Rule destinationAlger = new Rule(rb, "Destination Alger",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDestination"),
+                        new Clause(destination, cEquals, "Alger")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDate")}
+        );
+
+        Rule destinationParis = new Rule(rb, "Destination Paris",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDestination"),
+                        new Clause(destination, cEquals, "Paris")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDate")}
+        );
+
+        Rule destinationBerlin = new Rule(rb, "Destination Berlin",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDestination"),
+                        new Clause(destination, cEquals, "Berlin")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDate")}
+        );
+
+        Rule destinationMontreal = new Rule(rb, "Destination Stockholm",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDestination"),
+                        new Clause(destination, cEquals, "Stockholm"),
+                        new Clause(depart, cEquals, "Alger")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDate")}
+        );
+
+        //Vérifier la date de départ
+        for (int i = 0; i < airAlgDates.length; i++) {
+            Rule checkDateDepart = new Rule(rb, "Check_equal_date_depart" + i,
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkDate"),
+                            new Clause(date, cEquals, airAlgDates[i])
+                    },
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkDateRetour"),
+                            new Clause(price, cEquals, "200")
+                    }
+            );
+        }
+
+
+        for (int i = 0; i < airAlgDates.length; i++) {
+            Rule checkNextDateDepart = new Rule(rb, "Check_next_date_depart" + i,
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkDate"),
+                            new Clause(date, cDateLessThan, airAlgDates[i])
+                    },
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkDateRetour"),
+                            new Clause(date, cEquals, airAlgDates[i]),
+                            new Clause(price, cEquals, "200")
+                    }
+            );
+        }
+
+        //Vérifier la date de retour si demandé
+        Rule checkDateRetourNull = new Rule(rb, "check_date_retour_equals_null",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDateRetour"),
+                        new Clause(dateR, cEquals, "null")
+                },
+                new Clause[]{
+                        new Clause(check, cEquals, "checkPlaces")
+                }
+        );
+
+        for (int i = 0; i < airAlgDates.length; i++) {
+            Rule checkDateRetour = new Rule(rb, "Check_equal_date_retour" + i,
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkDateRetour"),
+                            new Clause(dateR, cEquals, airAlgDates[i])
+                    },
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkPlaces"),
+                            new Clause(price, cEquals, "500")
+                    }
+            );
+        }
+
+        for (int i = 0; i < airAlgDates.length; i++) {
+            Rule checkNextDateRetour = new Rule(rb, "Check_next_date_retour" + i,
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkDateRetour"),
+                            new Clause(dateR, cDateLessThan, airAlgDates[i]),
+                            new Clause(dateR, cNotEquals, String.valueOf(date.value))
+                    },
+                    new Clause[]{
+                            new Clause(dateR, cEquals, airAlgDates[i]),
+                            new Clause(price, cEquals, "500"),
+                            new Clause(check, cEquals, "checkPlaces")
+                    }
+            );
+        }
+
+        //regles de vérification des places
+        for (Vol v: airFRvols) {
+            Rule checkNbPlaces = new Rule(rb, "check_nb_places",
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkPlaces"),
+                            new Clause(depart, cEquals, v.depart),
+                            new Clause(destination, cEquals, v.destination),
+                            new Clause(date, cEquals, v.dateDepart),
+                            new Clause(nbbillets, cLessThan, String.valueOf(v.nbPlaces))
+                    },
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkEscale")
+                    }
+            );
+        }
+
+
+        //les regles d'escales
+
+        //Alger vs Londre
+        Rule voleAlgerLondre = new Rule(rb, "Vole de Alger vers Stockholm",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Alger"),
+                        new Clause(destination,cEquals, "Berlin")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+
+        Rule voleLondreAlger = new Rule(rb, "Vole de Stockholm vers Alger",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Stockholm"),
+                        new Clause(destination,cEquals, "Alger")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+
+        //Alger vs Paris
+
+        Rule voleAlgerParis = new Rule(rb, "Vole de Alger vers Paris",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Alger"),
+                        new Clause(destination,cEquals, "Paris")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Direct")
+                });
+
+        Rule voleParisAlger = new Rule(rb, "Vole de Paris vers Alger",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Paris"),
+                        new Clause(destination,cEquals, "Alger")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Direct")
+                });
+
+        //Alger vs Montreal
+
+        Rule voleAlgerMontreal = new Rule(rb, "Vole de Alger vers Berlin",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Alger"),
+                        new Clause(destination,cEquals, "Berlin")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+        Rule voleMontrealAlger = new Rule(rb, "Vole de Stockholm vers Alger",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Stockholm"),
+                        new Clause(destination,cEquals, "Alger")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+
+        //Londre vs Pris
+        Rule voleLondreParis = new Rule(rb, "Vole de Berlin vers Paris",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Berlin"),
+                        new Clause(destination,cEquals, "Paris")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Direct")
+                });
+        Rule voleParisLondre = new Rule(rb, "Vole de Paris vers Stockholm",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Paris"),
+                        new Clause(destination,cEquals, "Stockholm")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Direct")
+                });
+
+        Rule reductionEscaleDouble = new Rule(rb, "reduction escale",
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale"),
+                        new Clause(dateR, cNotEquals, "null")
+                },
+                new Clause[]{
+                        new Clause(price, cEquals, "350")
+                }
+        );
+
+        Rule reductionEscale = new Rule(rb, "reduction escale",
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale"),
+                        new Clause(dateR, cEquals, "null")
+                },
+                new Clause[]{
+                        new Clause(price, cEquals, "150")
+                }
+        );
+
+        return rb;
+
+    }
+
+    public static RuleBase AirGBARuleBase(){
+        RuleBase rb = new RuleBase("British airline");
+
+        rb.goalClauseStack = new Stack() ;
+        rb.variableList = new Hashtable() ;
+        rb.ruleList = new Vector() ;
+
+        RuleVariable check = new RuleVariable("check");
+        check.setLabels("checkDepart checkDestination checkDate checkNbrBillets");
+        rb.variableList.put(check.name, check);
+
+        RuleVariable destination = new RuleVariable("Destination");
+        destination.setLabels("Paris Stockholm Berlin Alger");
+        rb.variableList.put(destination.name, destination);
+
+        RuleVariable depart = new RuleVariable("Depart");
+        depart.setLabels("Paris Stockholm Berlin Alger");
+        rb.variableList.put(depart.name, depart);
+
+        RuleVariable age = new RuleVariable("Age");
+        age.setLabels("2 4 6 8 10 12 14 16 20 25 30 55 70 76 80");
+        rb.variableList.put(age.name, age);
+
+        RuleVariable aeroport = new RuleVariable("Aeroports");
+        aeroport.setLabels("");
+        rb.variableList.put(aeroport.name, aeroport);
+
+        RuleVariable nbbillets = new RuleVariable("NbBillets");
+        nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
+        rb.variableList.put(nbbillets.name, nbbillets);
+
+        RuleVariable nbEnfants = new RuleVariable("NbEnfants");
+        nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
+        rb.variableList.put(nbEnfants.name, nbEnfants);
+
+        RuleVariable nbAdulte = new RuleVariable("NbAdultes");
+        nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
+        rb.variableList.put(nbAdulte.name, nbAdulte);
+
+        RuleVariable nbAdolescents = new RuleVariable("NbAdolescents");
+        nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
+        rb.variableList.put(nbAdolescents.name, nbAdolescents);
+
+        RuleVariable nbAged = new RuleVariable("NbAged");
+        nbbillets.setLabels("1 2 3 4 5 6 7 8 9");
+        rb.variableList.put(nbAged.name, nbAged);
+
+        RuleVariable remiseBillet = new RuleVariable("RemiseSurBillets");
+        remiseBillet.setLabels("Avec Sans");
+        rb.variableList.put(remiseBillet.name, remiseBillet);
+
+        RuleVariable remiseEscale = new RuleVariable("RemiseSurEscale");
+        remiseEscale.setLabels("Avec Sans");
+        rb.variableList.put(remiseEscale.name, remiseEscale);
+
+        RuleVariable saison = new RuleVariable("Saison");
+        saison.setLabels("Saison_Estivale Hors_Saison_Estivale");
+        rb.variableList.put(saison.name, saison);
+
+        RuleVariable agereduction = new RuleVariable("AgeReduction");
+        agereduction.setLabels("10% 15% 20%");
+        rb.variableList.put(agereduction.name, agereduction);
+
+        RuleVariable date = new RuleVariable("Date");
+        date.setLabels("22/09/2021 07/08/2021 11/06/2021 24/10/2021 21/11/2021 26/11/2021");
+        rb.variableList.put(date.name, date);
+
+        RuleVariable dateR = new RuleVariable("DateR");
+        dateR.setLabels("22/09/2021 07/08/2021 11/06/2021 24/10/2021 21/11/2021 26/11/2021");
+        rb.variableList.put(dateR.name, dateR);
+
+        RuleVariable voyage = new RuleVariable("Voyage");
+        voyage.setLabels("Escale Direct");
+        rb.variableList.put(voyage.name, voyage);
+
+        RuleVariable price = new RuleVariable("Prix");
+        price.setLabels("200");
+        rb.variableList.put(price.name, price);
+
+        //Define rules pt2
+        Rule departAlger = new Rule(rb, "Depart Londre",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDepart"),
+                        new Clause(depart, cEquals, "Londre")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDestination")}
+        );
+        Rule departParis = new Rule(rb, "Depart Paris",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDepart"),
+                        new Clause(depart, cEquals, "Paris")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDestination")}
+        );
+
+        Rule departLondre = new Rule(rb, "Depart Madrid",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDepart"),
+                        new Clause(depart, cEquals, "Madrid")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDestination")}
+        );
+
+        Rule departMontreal = new Rule(rb, "Depart Amsterdam",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDepart"),
+                        new Clause(depart, cEquals, "Amsterdam")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDestination")}
+        );
+
+        Rule destinationAlger = new Rule(rb, "Destination Londre",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDestination"),
+                        new Clause(destination, cEquals, "Londre")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDate")}
+        );
+
+        Rule destinationParis = new Rule(rb, "Destination Paris",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDestination"),
+                        new Clause(destination, cEquals, "Paris")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDate")}
+        );
+
+        Rule destinationBerlin = new Rule(rb, "Destination Madrid",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDestination"),
+                        new Clause(destination, cEquals, "Madrid")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDate")}
+        );
+
+        Rule destinationMontreal = new Rule(rb, "Destination Amsterdam",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDestination"),
+                        new Clause(destination, cEquals, "Amsterdam"),
+                        new Clause(depart, cEquals, "Londre")
+                },
+                new Clause[]{new Clause(check, cEquals, "checkDate")}
+        );
+
+        //Vérifier la date de départ
+        for (int i = 0; i < airAlgDates.length; i++) {
+            Rule checkDateDepart = new Rule(rb, "Check_equal_date_depart" + i,
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkDate"),
+                            new Clause(date, cEquals, airAlgDates[i])
+                    },
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkDateRetour"),
+                            new Clause(price, cEquals, "200")
+                    }
+            );
+        }
+
+
+        for (int i = 0; i < airAlgDates.length; i++) {
+            Rule checkNextDateDepart = new Rule(rb, "Check_next_date_depart" + i,
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkDate"),
+                            new Clause(date, cDateLessThan, airAlgDates[i])
+                    },
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkDateRetour"),
+                            new Clause(date, cEquals, airAlgDates[i]),
+                            new Clause(price, cEquals, "200")
+                    }
+            );
+        }
+
+        //Vérifier la date de retour si demandé
+        Rule checkDateRetourNull = new Rule(rb, "check_date_retour_equals_null",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkDateRetour"),
+                        new Clause(dateR, cEquals, "null")
+                },
+                new Clause[]{
+                        new Clause(check, cEquals, "checkPlaces")
+                }
+        );
+
+        for (int i = 0; i < airAlgDates.length; i++) {
+            Rule checkDateRetour = new Rule(rb, "Check_equal_date_retour" + i,
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkDateRetour"),
+                            new Clause(dateR, cEquals, airAlgDates[i])
+                    },
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkPlaces"),
+                            new Clause(price, cEquals, "500")
+                    }
+            );
+        }
+
+        for (int i = 0; i < airAlgDates.length; i++) {
+            Rule checkNextDateRetour = new Rule(rb, "Check_next_date_retour" + i,
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkDateRetour"),
+                            new Clause(dateR, cDateLessThan, airAlgDates[i]),
+                            new Clause(dateR, cNotEquals, String.valueOf(date.value))
+                    },
+                    new Clause[]{
+                            new Clause(dateR, cEquals, airAlgDates[i]),
+                            new Clause(price, cEquals, "500"),
+                            new Clause(check, cEquals, "checkPlaces")
+                    }
+            );
+        }
+
+        //regles de vérification des places
+        for (Vol v: airFRvols) {
+            Rule checkNbPlaces = new Rule(rb, "check_nb_places",
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkPlaces"),
+                            new Clause(depart, cEquals, v.depart),
+                            new Clause(destination, cEquals, v.destination),
+                            new Clause(date, cEquals, v.dateDepart),
+                            new Clause(nbbillets, cLessThan, String.valueOf(v.nbPlaces))
+                    },
+                    new Clause[]{
+                            new Clause(check, cEquals, "checkEscale")
+                    }
+            );
+        }
+
+
+        //les regles d'escales
+
+        //Alger vs Londre
+        Rule voleAlgerLondre = new Rule(rb, "Vole de Alger vers Stockholm",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Madrid"),
+                        new Clause(destination,cEquals, "Amsterdam")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+
+        Rule voleLondreAlger = new Rule(rb, "Vole de Stockholm vers Alger",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Amsterdam"),
+                        new Clause(destination,cEquals, "Madrid")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+
+        //Alger vs Paris
+
+        Rule voleAlgerParis = new Rule(rb, "Vole de Alger vers Paris",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Londre"),
+                        new Clause(destination,cEquals, "Paris")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Direct")
+                });
+
+        Rule voleParisAlger = new Rule(rb, "Vole de Paris vers Alger",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Paris"),
+                        new Clause(destination,cEquals, "Londre")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Direct")
+                });
+
+        //Alger vs Montreal
+
+        Rule voleAlgerMontreal = new Rule(rb, "Vole de Alger vers Berlin",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Londre"),
+                        new Clause(destination,cEquals, "Berlin")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+        Rule voleMontrealAlger = new Rule(rb, "Vole de Stockholm vers Alger",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Stockholm"),
+                        new Clause(destination,cEquals, "Alger")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale")
+                });
+
+        //Londre vs Pris
+        Rule voleLondreParis = new Rule(rb, "Vole de Berlin vers Paris",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Berlin"),
+                        new Clause(destination,cEquals, "Paris")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Direct")
+                });
+        Rule voleParisLondre = new Rule(rb, "Vole de Paris vers Stockholm",
+                new Clause[]{
+                        new Clause(check, cEquals, "checkEscale"),
+                        new Clause(depart, cEquals, "Paris"),
+                        new Clause(destination,cEquals, "Stockholm")
+                },
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Direct")
+                });
+
+        Rule reductionEscaleDouble = new Rule(rb, "reduction escale",
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale"),
+                        new Clause(dateR, cNotEquals, "null")
+                },
+                new Clause[]{
+                        new Clause(price, cEquals, "350")
+                }
+        );
+
+        Rule reductionEscale = new Rule(rb, "reduction escale",
+                new Clause[]{
+                        new Clause(voyage, cEquals, "Escale"),
+                        new Clause(dateR, cEquals, "null")
+                },
+                new Clause[]{
+                        new Clause(price, cEquals, "150")
+                }
+        );
+
+        return rb;
+
+    }
 
 }

@@ -1,16 +1,15 @@
-package gui;
+package app.jade;
 
 import app.Ressources;
-import app.jade.CentralAgent;
-import app.jade.Form;
+import app.rule.RuleBase;
+import app.rule.RuleVariable;
+import gui.FlightsController;
 import jade.Boot;
 import jade.core.Agent;
-import jade.core.AgentContainer;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.lang.acl.ACLMessage;
-import jade.wrapper.ContainerController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -23,17 +22,66 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.*;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
-public class FlightsController extends Agent implements Initializable{
+public class GuiAgent extends Agent implements Initializable {
+    Object[] obj=null;
+    TextArea display = new TextArea();
+
+    protected void setup(){
+        try{
+            DFAgentDescription dfd= new DFAgentDescription();
+            dfd.setName(this.getAID());
+            DFService.register(this,dfd);
+        }catch (Exception e){
+            System.out.println(e);
+        }
+
+        addBehaviour(new CyclicBehaviour(this) {
+            public void action(){
+                ACLMessage msg = receive();
+                if (msg != null) {
+                    if(msg.getPerformative()==ACLMessage.INFORM){
+
+                        try {
+                            System.out.println("printing in GUI : ");
+                            offers.add(new Offer(msg.getContent()));
+                            ACLMessage reply = msg.createReply();
+                            reply.setContent("GUI IS RESPONDING TO AGENT_CENTRAL");
+                            myAgent.send(reply);
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                    }
+                    else if(msg.getPerformative()==ACLMessage.CONFIRM){
+                        //we enter here to confirm l'achat des billets
+                        System.out.println("GUI CONFIRMATION");
+                        System.out.println(msg.getContent());
+                        ACLMessage reply=msg.createReply();
+                        reply.setContent("WELCOME ABROAD :D");
+                        myAgent.send(reply);
+                        //this deletes the agent
+                        doDelete();
+                    }
+                }
+                else {
+                    block();
+                }
+                //whathever
+            }
+        });
+    }
+
 
     private Stage stage;
     private Scene scene;
@@ -85,11 +133,11 @@ public class FlightsController extends Agent implements Initializable{
         public Vols(){};
 
         public Vols(String c, String d, String p, String du, String e){
-        this.company = new SimpleStringProperty(c);
-        this.dateDepart = new SimpleStringProperty(d);
-        this.prix = new SimpleStringProperty(p);
-        this.duree = new SimpleStringProperty(du);
-        this.escale = new SimpleStringProperty(e);
+            this.company = new SimpleStringProperty(c);
+            this.dateDepart = new SimpleStringProperty(d);
+            this.prix = new SimpleStringProperty(p);
+            this.duree = new SimpleStringProperty(du);
+            this.escale = new SimpleStringProperty(e);
         }
 
         public String getCompany() {
@@ -162,39 +210,51 @@ public class FlightsController extends Agent implements Initializable{
     @FXML
     DatePicker departD, retourD = new DatePicker();
     @FXML
-    TableView<Vols> tableRes = new TableView<Vols>();
-    @FXML
-    TableColumn<Vols, String> Compagnie = new TableColumn<Vols,String>();
-    @FXML
-    TableColumn<Vols, String> Escales = new TableColumn<Vols,String>();
-    @FXML
-    TableColumn<Vols, String> Duree = new TableColumn<Vols,String>();
-    @FXML
-    TableColumn<Vols, String> Date = new TableColumn<Vols,String>();
-    @FXML
-    TableColumn<Vols, String> Prix = new TableColumn<Vols,String>();
+    public TableView<Offer> tableRes = new TableView<>();
+
     @FXML
     Button reserver = new Button();
+    Button showBtn = new Button();
     @FXML
     public TextArea textLogs = new TextArea();
 
+    public static ArrayList<Offer> offers = new ArrayList();
 
+    public void showData(ActionEvent event){
+        for (Offer o: offers) {
+            this.tableRes.getItems().add(o);
+            System.out.println(o.toString());
+        }
+        offers.clear();
+    }
     //Doit contenir tous les resultats a afficher dans la tableveiw
-    private ObservableList<Vols> Resultats = FXCollections.observableArrayList();
+    private ObservableList<FlightsController.Vols> Resultats = FXCollections.observableArrayList();
 
-    private  Vols finalChoice = new Vols();
-
+    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Compagnie.setCellValueFactory(data -> data.getValue().company);
-        Escales.setCellValueFactory(data -> data.getValue().escale);
-        Date.setCellValueFactory(data -> data.getValue().dateDepart);
-        Prix.setCellValueFactory(data -> data.getValue().prix);
-        Duree.setCellValueFactory(data -> data.getValue().duree);
+        //initializing results table
+        TableColumn column1 = new TableColumn<>("Companie");
+        column1.setCellValueFactory(new PropertyValueFactory<>("companie"));
+
+        TableColumn column2 = new TableColumn<>("Date départ");
+        column2.setCellValueFactory(new PropertyValueFactory<>("dateD"));
+
+        TableColumn column3 = new TableColumn<>("date retour");
+        column3.setCellValueFactory(new PropertyValueFactory<>("dateR"));
+
+        TableColumn column4 = new TableColumn<>("Escale");
+        column4.setCellValueFactory(new PropertyValueFactory<>("escale"));
+
+        TableColumn column5 = new TableColumn<>("Prix");
+        column5.setCellValueFactory(new PropertyValueFactory<>("prix"));
+
+        tableRes.getColumns().addAll(column1, column2, column3, column4, column5);
 
         // get destinations from ressources
         ArrayList<String> villes = new ArrayList<>();
         villes.addAll(Arrays.asList(Ressources.airAlgVilles));
         villes.addAll(Arrays.asList(Ressources.airFRVilles));
+        villes.addAll(Arrays.asList(Ressources.airGBAVilles));
         Set<String> temp = new HashSet<>(villes);
         villes.clear();
         villes.addAll(temp);
@@ -203,6 +263,7 @@ public class FlightsController extends Agent implements Initializable{
         ArrayList<String> airports = new ArrayList<>();
         airports.addAll(Arrays.asList(Ressources.airAlgAirports));
         airports.addAll(Arrays.asList(Ressources.airFRAirports));
+        airports.addAll(Arrays.asList(Ressources.airGBAAirports));
         temp = new HashSet<>(airports);
         airports.clear();
         airports.addAll(temp);
@@ -211,8 +272,6 @@ public class FlightsController extends Agent implements Initializable{
         this.departP.getItems().addAll(villes);
         this.destinationP.getItems().addAll(villes);
         this.aeroport.getItems().addAll(airports);
-
-        textLogs.appendText("azul1");
 
         tableRes.setOnMouseClicked(e ->{
             event();
@@ -239,7 +298,6 @@ public class FlightsController extends Agent implements Initializable{
                 String.valueOf(this.nbAgees.getValue())
         );
 
-
         /*JSONObject obj = new JSONObject();
         obj.put("depart", this.departP.getValue());
         obj.put("destination", this.destinationP.getValue());
@@ -252,12 +310,23 @@ public class FlightsController extends Agent implements Initializable{
         System.out.println(args);
          */
 
+        String[] jadearg= new String[2];
+        StringBuffer SbAgent=new StringBuffer();
+        SbAgent.append("AC:app.jade.CentralAgent(" + formulaire.toString() + ");");
+        SbAgent.append("AN1:app.jade.Company1;");
+        SbAgent.append("GUI:app.jade.GuiAgent;");
+        SbAgent.append("AN2:app.jade.Company2;");
+        SbAgent.append("AN3:app.jade.Company3;");
+        jadearg[0]="-gui";
+        jadearg[1]=SbAgent.toString();
+        Boot.main(jadearg);
+
+
     }
 
 
     //what to do when a row is selected
     private void event(){
-        finalChoice = tableRes.getSelectionModel().getSelectedItems().get(0);
         //disable button if no row selected
         //else enable it
         reserver.setDisable(false);
@@ -271,71 +340,11 @@ public class FlightsController extends Agent implements Initializable{
         this.aeroport.setValue(null);
         SpinnerValueFactory<Integer> factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100000, 0);
         this.nbAdolescents.setValueFactory(factory);
+        factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100000, 0);
         this.nbAdultes.setValueFactory(factory);
+        factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100000, 0);
         this.nbAgees.setValueFactory(factory);
+        factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100000, 0);
         this.nbEnfants.setValueFactory(factory);
     }
-
-
-
-    //--------------------------- Agent part -------------------------------------------------------------------
-
-    Object[] obj=null;
-    TextArea display = new TextArea();
-
-    protected void setup(){
-        System.out.println("ok");
-        try{
-            DFAgentDescription dfd= new DFAgentDescription();
-            dfd.setName(this.getAID());
-            DFService.register(this,dfd);
-            System.out.println("bien");
-        }catch (Exception e){
-            System.out.println(e);
-            System.out.println("Tnaket");
-        }
-
-        addBehaviour(new CyclicBehaviour(this) {
-            public void action(){
-                ACLMessage msg = receive();
-                if (msg != null) {
-                    if(msg.getPerformative()==ACLMessage.INFORM){
-
-                        try {
-                            System.out.println("printing in GUI : ");
-                            obj=(Object[]) msg.getContentObject();
-                            String jsonString = "";
-                            for (int i = 0; i < obj.length; i++) {
-                                jsonString += obj[i];
-                            }
-                            JSONObject jsonObj = (JSONObject) new JSONParser().parse(jsonString);
-                            System.out.println("----------" + jsonString);
-                            ACLMessage reply = msg.createReply();
-                            reply.setContent("GUI IS RESPONDING TO AGENT_CENTRAL");
-                            myAgent.send(reply);
-
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-
-                    }
-                    else if(msg.getPerformative()==ACLMessage.CONFIRM){
-                        //we enter here to confirm l'achat des billets
-                        System.out.println("GUI CONFIRMATION");
-                        ACLMessage reply=msg.createReply();
-                        reply.setContent("WELCOME ABROAD :D");
-                        myAgent.send(reply);
-                        //this deletes the agent
-                        doDelete();
-                    }
-
-                }
-                else {
-                    block();
-                }
-                //whathever
-            }
-        });
-    }
-
 }

@@ -26,10 +26,11 @@ public class CentralAgent extends Agent {
             }
 
             //Message sending
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < 3; i++) {
                 ACLMessage message= new ACLMessage(ACLMessage.INFORM);
                 message.setContentObject(obj);
                 String s="AN"+(i+1);
+                System.out.println("data sent to " + s);
                 message.addReceiver(new AID(s,AID.ISLOCALNAME));
                 send(message);
             }
@@ -45,8 +46,6 @@ public class CentralAgent extends Agent {
                 ACLMessage msg = receive();
                 if (msg != null) {
                     if (msg.getPerformative()==ACLMessage.INFORM){
-                        //we print the data given by les annexes, treat it and
-                        //then resend another message to the annex that the user has chosen
 
                         try {
                             System.out.println("printing in AC : ");
@@ -54,10 +53,10 @@ public class CentralAgent extends Agent {
                             System.out.println(simpleObj);
 
                             //new message to the annexe we chose, probably better if its a function
-                            ACLMessage msg1 = new ACLMessage(ACLMessage.CONFIRM);
-                            msg1.setContent(simpleObj.toString());
+                            ACLMessage msg1 = new ACLMessage(ACLMessage.INFORM);
+                            msg1.setContent(msg.getContent());
                             //send to selected annexe
-                            msg1.addReceiver(new AID("AN2", AID.ISLOCALNAME));
+                            msg1.addReceiver(new AID("GUI", AID.ISLOCALNAME));
                             send(msg1);
                         } catch (Exception e) {
                             e.printStackTrace();

@@ -51,7 +51,8 @@ public class RuleBase {
     }
 
     public static void appendText(String text) {
-        System.out.println(text); }
+        //System.out.println(text);
+    }
 
     // for trace purposes - display all variables and their value
     public ArrayList<String> displayVariables() {

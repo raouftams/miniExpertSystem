@@ -1,6 +1,7 @@
 package app.jade;
 
 import app.Ressources;
+import app.rule.Rule;
 import app.rule.RuleBase;
 import app.rule.RuleVariable;
 import jade.core.Agent;
@@ -30,8 +31,7 @@ public class Company1 extends Agent {
                 ACLMessage msg = receive();
                 if (msg != null) {
                     if(msg.getPerformative()==ACLMessage.INFORM){
-                        //We will make an if here li tdifferenci between when we send the data
-                        //Or when we choose the annexe pour le vol
+
                         try {
                             System.out.println("printing in AN1 : ");
                             obj=(Object[]) msg.getContentObject();
@@ -73,11 +73,28 @@ public class Company1 extends Agent {
 
                             rvar = (RuleVariable)rb.getVariableList().get("check");
                             rvar.setValue("checkDepart");
-                            System.out.println("dagi3");
-                            rb.forwardChain(display);
-                            System.out.println(rb.displayVariables());
 
-                            reply.setContent("AN1 IS RESPONDING TO AGENT_CENTRAL");
+                            rb.forwardChain(display);
+
+                            RuleVariable escaleVar = (RuleVariable)rb.getVariableList().get("Voyage");
+                            String escale = escaleVar.value;
+                            RuleVariable dateDvar = (RuleVariable)rb.getVariableList().get("Date");
+                            String dateD = dateDvar.value;
+                            RuleVariable dateRvar = (RuleVariable)rb.getVariableList().get("DateR");
+                            String dateR = dateRvar.value;
+                            RuleVariable prixVar = (RuleVariable)rb.getVariableList().get("Prix");
+                            String prix = prixVar.value;
+
+                            int nbAdulte = Integer.parseInt(((RuleVariable)rb.getVariableList().get("NbAdultes")).value);
+                            int nbAgee = Integer.parseInt(((RuleVariable)rb.getVariableList().get("NbAged")).value);
+                            int nbEnfant = Integer.parseInt(((RuleVariable)rb.getVariableList().get("NbEnfants")).value);
+
+                            int price = Integer.parseInt(prix);
+
+                            int finalPrice = price*(nbAdulte) + (price-(15*price/100))*(nbEnfant+nbAgee);
+
+                            Offer offre = new Offer("Air Algerie", escale, dateD, dateR, String.valueOf(finalPrice));
+                            reply.setContent(offre.toString());
                             myAgent.send(reply);
 
                         }catch (Exception e){
